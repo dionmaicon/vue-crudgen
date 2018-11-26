@@ -1,0 +1,28 @@
+{
+  "name": "crud-vuejs",
+  "version": "1.0.0",
+  "description": "CRUD (Create, Read, Update and Delete) basic gerenerator for Vue.js",
+  "main": "main.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dionmaicon/crud-vuejs.git"
+  },
+  "keywords": [
+    "CRUD",
+    "Vue.js",
+    "Generator",
+    "Boostrap"
+  ],
+  "author": "Dion Maicon E. Duarte <dionmaicon@outlook.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dionmaicon/crud-vuejs/issues"
+  },
+  "homepage": "https://github.com/dionmaicon/crud-vuejs#readme"
+}
