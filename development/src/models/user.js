@@ -1,14 +1,19 @@
-const user = (function() {
+const resource = {
+  endPoint: "http://localhost:3002/users"
+}
+
+const model = (function() {
+
   let name = {
     value: '',
     required: true,
     type: 'text',
   };
 
-  let age = {
+  let birth =  {
     value: '',
     required: true,
-    type: 'number'
+    type: 'date'
   };
 
   let gender_select = {
@@ -39,15 +44,25 @@ const user = (function() {
 
   };
 
+  let picture_file = {
+    type: 'file',
+    placeholder: 'Get the file',
+    required: true
+  };
+
+  let hide = ['picture', 'message', 'partners', 'preference', 'gender']
+
   return {
-    age: age,
     name: name,
+    birth: birth,
+    picture_file: picture_file,
     gender_select: gender_select,
     message_textarea: message_textarea,
     preference_radio: preference_radio,
-    partners_checkbox: partners_checkbox
+    partners_checkbox: partners_checkbox,
+    hide: hide
   }
 
 })();
 
-module.exports = user;
+module.exports =  {model, resource};
