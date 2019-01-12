@@ -5,7 +5,7 @@ const Create = class {
     this.resource = resource;
   }
 
-  getTemplate(){
+  getTemplate() {
     let templateHTMLBegin = `
     <template>
       <div class="${this.modelName}Create">
@@ -56,6 +56,6 @@ const Create = class {
 
     return templateHTMLBegin;
   }
-}
+};
 
 module.exports = Create;

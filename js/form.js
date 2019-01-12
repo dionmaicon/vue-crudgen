@@ -1,3 +1,4 @@
+/* eslint-disable */
 const Form = class {
 
   constructor(name, model, resource){
@@ -38,7 +39,7 @@ const Form = class {
         if (property.includes('select')) { //SELECT
           templateStruct += `<div class="col-12">\n`
           templateStruct += `\t<select id="${prefix}" v-model="${this.modelName}.${prefix}.selected" class="form-control" >\n`;
-          templateStruct += `\t\t<option v-for="option in ${this.modelName}.${prefix}.options" v-bind:value="option.value"> \n`;
+          templateStruct += `\t\t<option v-for="option in ${this.modelName}.${prefix}.options" :key="option.value" v-bind:value="option.value"> \n`;
           templateStruct += `\t\t\t{{option.text}}\n`;
           templateStruct += `\t\t</option>\n`;
           templateStruct += `\t</select>\n</div>\n`;
@@ -86,7 +87,7 @@ const Form = class {
   import {eventBus} from '../../main.js';
 
   export default {
-    props: ['id'],
+    props: ["id"],
     data () {
       return {
         ${this.modelName}: {
@@ -102,9 +103,9 @@ const Form = class {
       methodsScript
       handleSubmit(){
         if(this.id){
-          console.log("Implements here your submit method UPDATE");
+          //Implements here your submit method UPDATE
         }else {
-          console.log("Implements here your submit method CREATE");
+          //Implements here your submit method CREATE
         }
       },
       goBack(){

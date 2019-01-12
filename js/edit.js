@@ -1,3 +1,4 @@
+/* eslint-disable */
 const Edit = class {
   constructor(name, model, resource) {
     this.modelName = name;

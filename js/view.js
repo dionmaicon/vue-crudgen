@@ -1,4 +1,5 @@
-const View = class{
+/* eslint-disable */
+const View = class {
   constructor(name, model, resource){
     this.modelName = name;
     this.model = model;
@@ -18,7 +19,7 @@ const View = class{
               </nav>
             </div>
             <div class="row">
-                  <div class="card" style="width: 18rem;">
+                  <div class="card" style="width: 100%;">
                     <div class="card-header">
                       View ${this.modelName}
                     </div>

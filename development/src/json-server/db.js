@@ -1,18 +1,33 @@
 var faker = require('faker');
 
-function generateUsers () {
+function generate() {
   var users = [];
-  for (var id = 0; id < 50; id++){
+  var address = [];
+  for (var id = 0; id < 50; id++) {
     var name = faker.name.findName();
     var birth = faker.date.past();
-    var gender = "M";
     users.push({
       "id": id,
       "name": name,
-      "gender": gender,
-      "birth": birth
+      "birth": birth,
+      'address_id': id + 10,
     })
   }
-  return { "users": users }
+
+  for (var id = 10; id < 60; id++) {
+    let city = faker.address.city();
+    let country = faker.address.country();
+    address.push({
+      'id': id,
+      'city': city,
+      'country': country
+    })
+  }
+
+  return {
+    "users": users,
+    "address" : address
+  }
 }
-module.exports = generateUsers
+
+module.exports = generate

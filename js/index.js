@@ -1,3 +1,4 @@
+/* eslint-disable */
 const Index = class {
   constructor(name, model, resource){
     this.modelName = name;
@@ -43,7 +44,7 @@ const Index = class {
               <div class="input-group-text">Show</div>
             </div>
               <select v-model="pagination.numberRegisterForPage" id="inlineFormInputGroup" class="form-control" >
-                <option v-for="n in [5,10,25,50,100]" v-bind:value="n">
+                <option v-for="n in [5,10,25,50,100]" :key="n" v-bind:value="n">
                   {{n}}
                 </option>
               </select>
@@ -54,7 +55,9 @@ const Index = class {
 
       <div class="table-container" v-if="!modal">
         <div class="total-pages col">
-          <small>Total {{mainList.length}} entryes.</small>
+        <small v-if="mainList.length > 0">Total {{mainList.length}} entryes.</small>
+        <small v-else >Not found entryes or server response.</small>
+        <small v-if="search != ''"> Searching term for: "{{search}}"</small>
         </div>
         <table class="table table-striped" >
           <thead>
@@ -68,7 +71,7 @@ const Index = class {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(${this.modelName}, index) in ${this.modelName}List">
+            <tr v-for="(${this.modelName}, index) in ${this.modelName}List" :key="index">
               templateStrucTableBody
             </tr>
           </tbody>
@@ -78,7 +81,7 @@ const Index = class {
             <button type="button" class="btn btn-default" @click="pagination.current -= 1 " name="button"><i class="fa fa-backward"></i></button>
             <span>Page:<strong> {{pagination.current + 1}}  </strong></span>
             <button type="button" class="btn btn-default" @click="pagination.current += 1" name="button"><i class="fa fa-forward"></i></button>
-            <button type="button" class="btn btn-default" @click="pagination.current = pagination.numberPages" name="button">Last</i></button>
+            <button type="button" class="btn btn-default" @click="pagination.current = pagination.numberPages" name="button">Last</button>
         </div>
         </div>
       </div>
@@ -111,7 +114,7 @@ const Index = class {
         },
         edit(id){
           this.modal = !this.modal;
-          this.$router.push({ name: '${this.modelName}Edit', params: { id: id }})
+          this.$router.push({ name: "${ this.modelName }Edit", params: { id: id }})
         },
         remove(){
 
@@ -141,7 +144,7 @@ const Index = class {
           const fromDepth = from.path.split('/').length
           this.modal = toDepth < fromDepth ? false : true
         },
-        'pagination.current': function(value, oldValue){
+        'pagination.current': function(value){
           this.pagination.numberPages = parseInt(this.mainList.length / this.pagination.numberRegisterForPage);
           if(value < 1){
             this.pagination.current = 0;
@@ -151,11 +154,14 @@ const Index = class {
           }
           this.${this.modelName}List = this.mainList.slice((this.pagination.current * this.pagination.numberRegisterForPage), ((this.pagination.current * this.pagination.numberRegisterForPage) + this.pagination.numberRegisterForPage ));
         },
-        'pagination.numberRegisterForPage': function(value, oldValue){
+        'pagination.numberRegisterForPage': function(){
             this.pagination.current = -1;
         },
         'mainList': function(value){
           this.${this.modelName}List = value.slice((this.pagination.current * this.pagination.numberRegisterForPage), ((this.pagination.current * this.pagination.numberRegisterForPage) + this.pagination.numberRegisterForPage ));
+        },
+        'search': function( text){
+          this.${this.modelName}List = this.mainList.filter( object => JSON.stringify(object).includes(text))
         }
       },
       created(){

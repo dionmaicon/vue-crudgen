@@ -1,23 +1,38 @@
 
-    <template>
-      <div class="userEdit">
-        <div class="breadcrumbs">
-          <nav style="display: inline">
-            <li><router-link :to="{name: 'home', params:{} }"> Home </router-link></li> /
-            <li><router-link :to="{name: 'user', params:{} }"> user </router-link></li>/
-            <li><router-link class="breadcrumbs-active" :to="{name: 'userEdit', params:{id: id} }"> edit user </router-link></li>
-          </nav>
-        </div>
-        <h1> Edit user </h1>
-        <user-form :id="id"></user-form>
-      </div>
-    </template>
+<template>
+  <div class="userEdit">
+    <div class="breadcrumbs">
+      <nav style="display: inline">
+        <li>
+          <router-link :to="{name: 'home', params:{} }">
+            Home
+          </router-link>
+        </li> /
+        <li>
+          <router-link :to="{name: 'user', params:{} }">
+            user
+          </router-link>
+        </li>/
+        <li>
+          <router-link
+            class="breadcrumbs-active"
+            :to="{name: 'userEdit', params:{id: id} }"
+          >
+            edit user
+          </router-link>
+        </li>
+      </nav>
+    </div>
+    <h1> Edit user </h1>
+    <user-form :id="id" />
+  </div>
+</template>
 
     <script>
     import userForm from './userForm.vue';
 
     export default {
-      name: 'user',
+      name: 'User',
       data () {
         return {
           id: 'Teste'

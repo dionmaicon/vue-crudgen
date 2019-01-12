@@ -1,23 +1,38 @@
 
-    <template>
-      <div class="addressEdit">
-        <div class="breadcrumbs">
-          <nav style="display: inline">
-            <li><router-link :to="{name: 'home', params:{} }"> Home </router-link></li> /
-            <li><router-link :to="{name: 'address', params:{} }"> address </router-link></li>/
-            <li><router-link class="breadcrumbs-active" :to="{name: 'addressEdit', params:{id: id} }"> edit address </router-link></li>
-          </nav>
-        </div>
-        <h1> Edit address </h1>
-        <address-form :id="id"></address-form>
-      </div>
-    </template>
+<template>
+  <div class="addressEdit">
+    <div class="breadcrumbs">
+      <nav style="display: inline">
+        <li>
+          <router-link :to="{name: 'home', params:{} }">
+            Home
+          </router-link>
+        </li> /
+        <li>
+          <router-link :to="{name: 'address', params:{} }">
+            address
+          </router-link>
+        </li>/
+        <li>
+          <router-link
+            class="breadcrumbs-active"
+            :to="{name: 'addressEdit', params:{id: id} }"
+          >
+            edit address
+          </router-link>
+        </li>
+      </nav>
+    </div>
+    <h1> Edit address </h1>
+    <address-form :id="id" />
+  </div>
+</template>
 
     <script>
     import addressForm from './addressForm.vue';
 
     export default {
-      name: 'address',
+      name: 'Address',
       data () {
         return {
           id: 'Teste'

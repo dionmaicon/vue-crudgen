@@ -61,7 +61,7 @@ module.exports = {
   },
   plugins: [
     new BrowserSync({
-      // browse to http://localhost:3000/ during development,
+      // browse config to http://localhost:3000/ during development,
       // ./dist directory is being served
       host: 'localhost',
       port: 3000,

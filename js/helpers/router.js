@@ -1,3 +1,4 @@
+/* eslint-disable */
 const Router = class {
   constructor(models) {
     this.models = models
