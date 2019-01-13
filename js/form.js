@@ -101,11 +101,43 @@ const Form = class {
     },
     methods: {
       methodsScript
-      handleSubmit(){
+      async handleSubmit(){
         if(this.id){
           //Implements here your submit method UPDATE
+          /**
+          * type equals 0 means that this modal disappear automatically after 1500 milliseconds
+          * type equals 1 means that this modal  will have button close without timer
+          * type equals 2 means that this modal will have button close and ok without timer
+          */
+          let option = await this.$modal.show({title: "Warning", message: "Do you have sure that want complete this updated?", alert: "warning", type: 2});
+          if (option){
+            this.$http.put("${this.resource.endPoint}" + this.id, this.${this.modelName})
+            .then( (response) => {
+              if (response.status == 200) {
+                  this.$modal.show({title: "Success", message: "${ this.modelName} was updated with successfull!", alert: "success"});
+                  this.goBack();
+              }
+
+            }).catch(error => {
+              this.$modal.show({title: "Error", message: "Server response with error" + error, alert: "danger", type: 1});
+            });
+          }
+          return
         }else {
           //Implements here your submit method CREATE
+          let option = await this.$modal.show({title: "Warning", message: "Do you want to continue?", alert: "warning", type: 2});
+          if (option){
+            this.$http.post("${this.resource.endPoint}", this.${this.modelName})
+            .then( (response) => {
+                if(response.status == 201){
+                  this.$modal.show({title: "Success", message: "${this.modelName} was created with successfull!", alert: "success"});
+                  this.goBack();
+                }
+            }).catch(error => {
+              this.$modal.show({title: "Error", message: "Server response with error" + error, alert: "danger", type: 1});
+            })
+          }
+
         }
       },
       goBack(){
@@ -113,15 +145,11 @@ const Form = class {
       },
       setInstace(){
         if(this.id){
-          this.$http.get("${this.resource.endPoint}?id="+this.id)
+          this.$http.get("${this.resource.endPoint}" + this.id)
             .then(response => {
-              let instance = response.data[0];
+              let instance = response.data;
               for (var prop in instance) {
                 if (instance.hasOwnProperty(prop) && this.${this.modelName}.hasOwnProperty(prop)) {
-                  // if (prop == 'gender'){
-                  //     this.${this.modelName}[prop].selected = instance[prop];
-                  //     continue;
-                  // }
                   this.${this.modelName}[prop] = instance[prop];
                 }
               }

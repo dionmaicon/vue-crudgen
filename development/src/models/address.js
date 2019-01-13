@@ -1,5 +1,5 @@
 const resource = {
-  endPoint: "http://localhost:3002/address"
+  endPoint: "http://localhost:3002/address/"
 }
 
 const model = ( function(){

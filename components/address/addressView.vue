@@ -4,23 +4,20 @@
             <div class="breadcrumbs">
               <nav style="display: inline">
                 <li><router-link :to="{name: 'home', params:{} }"> Home </router-link></li> /
-                <li><router-link :to="{name: 'user', params:{} }"> user </router-link></li>/
-                <li><router-link class="breadcrumbs-active" :to="{name: 'userView', params:{id: id} }"> view user </router-link></li>
+                <li><router-link :to="{name: 'address', params:{} }"> address </router-link></li>/
+                <li><router-link class="breadcrumbs-active" :to="{name: 'addressView', params:{id: id} }"> view address </router-link></li>
               </nav>
             </div>
             <div class="row">
                   <div class="card" style="width: 100%;">
                     <div class="card-header">
-                      View user
+                      View address
                     </div>
                       <ul class="list-group list-group-flush">
-                       <li v-if="user.name"class="list-group-item"> <strong> name: </strong>{{user.name}}</li> 
- <li v-if="user.birth"class="list-group-item"> <strong> birth: </strong>{{user.birth}}</li> 
- <li v-if="user.picture"class="list-group-item"> <strong> picture: </strong>{{user.picture}}</li> 
- <li v-if="user.gender" class="list-group-item"> <strong> gender: </strong>{{user.gender.selected}}</li> 
- <li v-if="user.message"class="list-group-item"> <strong> message: </strong>{{user.message}}</li> 
- <li v-if="user.preference"class="list-group-item"> <strong> preference: </strong>{{user.preference}}</li> 
- <li v-if="user.partners"class="list-group-item"> <strong> partners: </strong>{{user.partners}}</li> 
+                       <li v-if="address.street"class="list-group-item"> <strong> street: </strong>{{address.street}}</li> 
+ <li v-if="address.number"class="list-group-item"> <strong> number: </strong>{{address.number}}</li> 
+ <li v-if="address.country"class="list-group-item"> <strong> country: </strong>{{address.country}}</li> 
+ <li v-if="address.city"class="list-group-item"> <strong> city: </strong>{{address.city}}</li> 
 
                       </ul>
                   </div>
@@ -54,7 +51,7 @@
           data(){
             return{
                 id: '',
-                user: {}
+                address: {}
             }
           },
           methods : {
@@ -62,12 +59,12 @@
               this.$router.go(-1);
             },
             edit(id) {
-              this.$router.push({ name: "userEdit", params: { id: id }});
+              this.$router.push({ name: "addressEdit", params: { id: id }});
             },
             setInstace() {
-              this.$http.get("http://localhost:3002/users/?id="+this.id)
+              this.$http.get("http://localhost:3002/address?id="+this.id)
               .then((response) => {
-                this.user = response.data[0];
+                this.address = response.data[0];
               })
             }
           },

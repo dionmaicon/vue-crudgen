@@ -107,7 +107,7 @@ partners: [],
           */
           let option = await this.$modal.show({title: "Warning", message: "Do you have sure that want complete this updated?", alert: "warning", type: 2});
           if (option){
-            this.$http.put("http://localhost:3002/users/" + this.id, this.user)
+            this.$http.put("undefined" + this.id, this.undefined)
             .then( (response) => {
               if (response.status == 200) {
                   this.$modal.show({title: "Success", message: "user was updated with successfull!", alert: "success"});
@@ -123,7 +123,7 @@ partners: [],
           //Implements here your submit method CREATE
           let option = await this.$modal.show({title: "Warning", message: "Do you want to continue?", alert: "warning", type: 2});
           if (option){
-            this.$http.post("http://localhost:3002/users/", this.user)
+            this.$http.post("http://localhost:3002/users/", this.undefined)
             .then( (response) => {
                 if(response.status == 201){
                   this.$modal.show({title: "Success", message: "user was created with successfull!", alert: "success"});
@@ -141,7 +141,7 @@ partners: [],
       },
       setInstace(){
         if(this.id){
-          this.$http.get("http://localhost:3002/users/" + this.id)
+          this.$http.get("http://localhost:3002/users/"+this.id)
             .then(response => {
               let instance = response.data;
               for (var prop in instance) {

@@ -31,8 +31,20 @@ const View = class {
 
             <div class="row">
                <div class="col">
-                 <router-link class="btn btn-default" :to="{ name: '${this.modelName}', params: {} }">BACK TO LIST</router-link>
-                 <router-link class="btn btn-warning" :to="{ name: '${this.modelName}Edit', params: {id: id} }">EDIT</router-link>
+                 <button
+                   @click="edit(id)"
+                   class="btn btn-warning "
+                 >
+                   Edit
+                 </button>
+                 <button
+                   type="button"
+                   @click="goBack()"
+                   name="button"
+                   class="btn btn-default"
+                 >
+                   Back To List
+                 </button>
                </div>
             </div>
           </div>
@@ -49,6 +61,12 @@ const View = class {
             }
           },
           methods : {
+            goBack() {
+              this.$router.go(-1);
+            },
+            edit(id) {
+              this.$router.push({ name: "${this.modelName}Edit", params: { id: id }});
+            },
             setInstace() {
               this.$http.get("${this.resource.endPoint}?id="+this.id)
               .then((response) => {
@@ -82,6 +100,11 @@ const View = class {
           color: black;
           font-weight: bold;
         }
+        button {
+          margin: 8px;
+          width: 30%;
+          float: right;
+        }
         </style>
 
     `;
@@ -96,6 +119,12 @@ const View = class {
         }
 
         if(property.includes('hide')) continue;
+
+        if(property.includes('select')) {
+            viewStruct += ` <li v-if="${this.modelName}.${prefix}" class="list-group-item"> <strong> ${prefix}: </strong>{{${this.modelName}.${prefix}.selected}}</li> \n`;
+            continue;
+        }
+
         viewStruct += ` <li v-if="${this.modelName}.${prefix}"class="list-group-item"> <strong> ${prefix}: </strong>{{${this.modelName}.${prefix}}}</li> \n`;
 
       }

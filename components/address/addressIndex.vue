@@ -10,13 +10,13 @@
       <div class="breadcrumbs" v-if="!modal">
         <nav style="display: inline">
           <li><router-link :to="{name: 'home', params:{} }"> Home </router-link></li> /
-          <li><router-link class="breadcrumbs-active" :to="{name: 'user', params:{} }"> user </router-link></li>
+          <li><router-link class="breadcrumbs-active" :to="{name: 'address', params:{} }"> address </router-link></li>
         </nav>
       </div>
 
       <div class="row" v-if="!modal">
         <div class="col">
-          <router-link class="btn btn-primary create-button" :to="{ name: 'userCreate', params: {} }">Create <i class="fa fa-plus" aria-hidden="true"></i></router-link>
+          <router-link class="btn btn-primary create-button" :to="{ name: 'addressCreate', params: {} }">Create <i class="fa fa-plus" aria-hidden="true"></i></router-link>
         </div>
       </div>
 
@@ -49,8 +49,8 @@
         <table class="table table-striped" >
           <thead>
             <tr>
-                <th @click="sortBy('name')"> name <i style="float: right" class="fa fa-sort"> </i></th>
-<th @click="sortBy('birth')"> birth <i style="float: right" class="fa fa-sort"> </i></th>
+                <th @click="sortBy('country')"> country <i style="float: right" class="fa fa-sort"> </i></th>
+<th @click="sortBy('city')"> city <i style="float: right" class="fa fa-sort"> </i></th>
 
                 <th>
                   <div class="options-th">
@@ -60,16 +60,16 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(user, index) in userList" :key="index">
-              <td>{{user.name}}</td>
-<td>{{user.birth}}</td>
+            <tr v-for="(address, index) in addressList" :key="index">
+              <td>{{address.country}}</td>
+<td>{{address.city}}</td>
 
     <td>
 
       <div class="options-button">
-        <button  class="btn btn-info" @click="view(user.id)" ><i class="fa fa-eye" aria-hidden="true"></i></button>
-        <button  class="btn btn-warning" @click="edit(user.id)" ><i class="fa fa-pencil" aria-hidden="true"></i></button>
-        <button  class="btn btn-danger" @click="remove(user.id)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+        <button  class="btn btn-info" @click="view(address.id)" ><i class="fa fa-eye" aria-hidden="true"></i></button>
+        <button  class="btn btn-warning" @click="edit(address.id)" ><i class="fa fa-pencil" aria-hidden="true"></i></button>
+        <button  class="btn btn-danger" @click="remove(address.id)"><i class="fa fa-trash" aria-hidden="true"></i></button>
       </div>
     </td>
     
@@ -97,10 +97,10 @@
             numberPages: 0,
             numberRegisterForPage: 5
           },
-          userList: [],
+          addressList: [],
           mainList:[],
           modal: false,
-          columns: ["picture","message","partners","preference","gender"],
+          columns: ["number","street"],
           sort: {
             key: null
           },
@@ -110,18 +110,18 @@
       methods: {
         view(id){
           this.modal = !this.modal;
-          this.$router.push({ name: 'userView', params: { id: id }})
+          this.$router.push({ name: 'addressView', params: { id: id }})
         },
         edit(id){
           this.modal = !this.modal;
-          this.$router.push({ name: "userEdit", params: { id: id }})
+          this.$router.push({ name: "addressEdit", params: { id: id }})
         },
         async remove(id){
-          let option = await this.$modal.show({title: "Danger", message: "Do you sure that want delete this user? This operation is irreversible!" , alert : "danger"});
+          let option = await this.$modal.show({title: "Danger", message: "Do you sure that want delete this address? This operation is irreversible!" , alert : "danger"});
           if(option){
-            this.$http.delete("http://localhost:3002/users/" + id)
+            this.$http.delete("http://localhost:3002/address" + id)
               .then( response => {
-                this.$modal.show({title: "Success", message: "user was deleted with successfull!", alert: "info"});
+                this.$modal.show({title: "Success", message: "address was deleted with successfull!", alert: "info"});
                 this.getResources();
               }).catch(err => {
                   this.$modal.show({title: "Error", message: "Server response with error" + error, alert: "danger", type: 1});
@@ -129,7 +129,7 @@
           }
         },
         getResources () {
-          this.$http.get("http://localhost:3002/users/").then((response) => {
+          this.$http.get("http://localhost:3002/address").then((response) => {
              this.mainList = response.data;
           })
         },
@@ -152,9 +152,6 @@
           const toDepth = to.path.split('/').length
           const fromDepth = from.path.split('/').length
           this.modal = toDepth < fromDepth ? false : true
-          if(!this.modal){
-            this.getResources();
-          }
         },
         'pagination.current': function(value){
           this.pagination.numberPages = parseInt(this.mainList.length / this.pagination.numberRegisterForPage);
@@ -164,16 +161,16 @@
           if(value > this.pagination.numberPages){
             this.pagination.current = this.pagination.numberPages;
           }
-          this.userList = this.mainList.slice((this.pagination.current * this.pagination.numberRegisterForPage), ((this.pagination.current * this.pagination.numberRegisterForPage) + this.pagination.numberRegisterForPage ));
+          this.addressList = this.mainList.slice((this.pagination.current * this.pagination.numberRegisterForPage), ((this.pagination.current * this.pagination.numberRegisterForPage) + this.pagination.numberRegisterForPage ));
         },
         'pagination.numberRegisterForPage': function(){
             this.pagination.current = -1;
         },
         'mainList': function(value){
-          this.userList = value.slice((this.pagination.current * this.pagination.numberRegisterForPage), ((this.pagination.current * this.pagination.numberRegisterForPage) + this.pagination.numberRegisterForPage ));
+          this.addressList = value.slice((this.pagination.current * this.pagination.numberRegisterForPage), ((this.pagination.current * this.pagination.numberRegisterForPage) + this.pagination.numberRegisterForPage ));
         },
         'search': function( text){
-          this.userList = this.mainList.filter( object => JSON.stringify(object).includes(text))
+          this.addressList = this.mainList.filter( object => JSON.stringify(object).includes(text))
         }
       },
       created(){
@@ -183,7 +180,7 @@
 
         this.getResources();
 
-        this.userList = this.mainList.slice(0,10);
+        this.addressList = this.mainList.slice(0,10);
         this.pagination.numberPages = parseInt(this.mainList.length / this.pagination.numberRegisterForPage);
       }
     }

@@ -152,9 +152,6 @@
           const toDepth = to.path.split('/').length
           const fromDepth = from.path.split('/').length
           this.modal = toDepth < fromDepth ? false : true
-          if(!this.modal){
-            this.getResources();
-          }
         },
         'pagination.current': function(value){
           this.pagination.numberPages = parseInt(this.mainList.length / this.pagination.numberRegisterForPage);

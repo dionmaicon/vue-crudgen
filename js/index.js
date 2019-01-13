@@ -114,10 +114,19 @@ const Index = class {
         },
         edit(id){
           this.modal = !this.modal;
-          this.$router.push({ name: "${ this.modelName }Edit", params: { id: id }})
+          this.$router.push({ name: "${this.modelName}Edit", params: { id: id }})
         },
-        remove(){
-
+        async remove(id){
+          let option = await this.$modal.show({title: "Danger", message: "Do you sure that want delete this ${this.modelName}? This operation is irreversible!" , alert : "danger"});
+          if(option){
+            this.$http.delete("${this.resource.endPoint}" + id)
+              .then( response => {
+                this.$modal.show({title: "Success", message: "${ this.modelName} was deleted with successfull!", alert: "info"});
+                this.getResources();
+              }).catch(err => {
+                  this.$modal.show({title: "Error", message: "Server response with error" + error, alert: "danger", type: 1});
+              });
+          }
         },
         getResources () {
           this.$http.get("${this.resource.endPoint}").then((response) => {
@@ -143,6 +152,9 @@ const Index = class {
           const toDepth = to.path.split('/').length
           const fromDepth = from.path.split('/').length
           this.modal = toDepth < fromDepth ? false : true
+          if(!this.modal){
+            this.getResources();
+          }
         },
         'pagination.current': function(value){
           this.pagination.numberPages = parseInt(this.mainList.length / this.pagination.numberRegisterForPage);
