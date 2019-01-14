@@ -1,0 +1,23 @@
+Example for firebase REST API
+
+//UPDATE, response success code equals 200
+this.$http.patch("https://vuejs-resource-tutorial.firebaseio.com/data/users/"+ this.id +".json", this.user)
+
+//CREATE, response success code equals 200
+this.$http.post("https://vuejs-resource-tutorial.firebaseio.com/data/users.json", this.user)
+
+//GET by $key, $key is reserved word of the firebase and is a random value generate by database
+this.$http.get(`https://vuejs-resource-tutorial.firebaseio.com/data/users.json?orderBy="$key"&equalTo="${this.id}"`)
+
+//GET ALL
+this.$http.get("https://vuejs-resource-tutorial.firebaseio.com/data/users.json").then((response) => {
+   let data = response.data;
+   this.mainList = [];
+   for (var x in data) {
+     if (data.hasOwnProperty(x)) {
+        let object = data[x];
+        this.mainList.push(object);
+        object.id =  x;
+     }
+   }
+})

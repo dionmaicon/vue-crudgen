@@ -4,20 +4,26 @@
             <div class="breadcrumbs">
               <nav style="display: inline">
                 <li><router-link :to="{name: 'home', params:{} }"> Home </router-link></li> /
-                <li><router-link :to="{name: 'address', params:{} }"> address </router-link></li>/
-                <li><router-link class="breadcrumbs-active" :to="{name: 'addressView', params:{id: id} }"> view address </router-link></li>
+                <li><router-link :to="{name: 'client', params:{} }"> client </router-link></li>/
+                <li><router-link class="breadcrumbs-active" :to="{name: 'clientView', params:{id: id} }"> view client </router-link></li>
               </nav>
             </div>
             <div class="row">
                   <div class="card" style="width: 100%;">
                     <div class="card-header">
-                      View address
+                      View client
                     </div>
                       <ul class="list-group list-group-flush">
-                       <li v-if="address.street"class="list-group-item"> <strong> street: </strong>{{address.street}}</li> 
- <li v-if="address.number"class="list-group-item"> <strong> number: </strong>{{address.number}}</li> 
- <li v-if="address.country"class="list-group-item"> <strong> country: </strong>{{address.country}}</li> 
- <li v-if="address.city"class="list-group-item"> <strong> city: </strong>{{address.city}}</li> 
+                       <li v-if="client.id"class="list-group-item"> <strong> id: </strong>{{client.id}}</li> 
+ <li v-if="client.username"class="list-group-item"> <strong> username: </strong>{{client.username}}</li> 
+ <li v-if="client.touchedAt"class="list-group-item"> <strong> touchedAt: </strong>{{client.touchedAt}}</li> 
+ <li v-if="client.aNumber"class="list-group-item"> <strong> aNumber: </strong>{{client.aNumber}}</li> 
+ <li v-if="client.bNumber"class="list-group-item"> <strong> bNumber: </strong>{{client.bNumber}}</li> 
+ <li v-if="client.vali"date"Test"class="list-group-item"> <strong> vali"date"Test: </strong>{{client.vali"date"Test}}</li> 
+ <li v-if="client.validateCustom"class="list-group-item"> <strong> validateCustom: </strong>{{client.validateCustom}}</li> 
+ <li v-if="client.defaultValueBoolean"class="list-group-item"> <strong> defaultValueBoolean: </strong>{{client.defaultValueBoolean}}</li> 
+ <li v-if="client.createdAt"class="list-group-item"> <strong> createdAt: </strong>{{client.createdAt}}</li> 
+ <li v-if="client.updateAt"class="list-group-item"> <strong> updateAt: </strong>{{client.updateAt}}</li> 
 
                       </ul>
                   </div>
@@ -51,7 +57,7 @@
           data(){
             return{
                 id: '',
-                address: {}
+                client: {}
             }
           },
           methods : {
@@ -59,12 +65,12 @@
               this.$router.go(-1);
             },
             edit(id) {
-              this.$router.push({ name: "addressEdit", params: { id: id }});
+              this.$router.push({ name: "clientEdit", params: { id: id }});
             },
             setInstace() {
-              this.$http.get("http://localhost:3002/address/?id="+this.id)
+              this.$http.get("https://vuejs-resource-tutorial.firebaseio.com/data.json?id="+this.id)
               .then((response) => {
-                this.address = response.data[0];
+                this.client = response.data[0];
               })
             }
           },

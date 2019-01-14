@@ -40,7 +40,7 @@
                    name="button"
                    class="btn btn-default"
                  >
-                   Back To List
+                   Back
                  </button>
                </div>
             </div>
@@ -65,7 +65,7 @@
               this.$router.push({ name: "userEdit", params: { id: id }});
             },
             setInstace() {
-              this.$http.get("http://localhost:3002/users/?id="+this.id)
+              this.$http.get("https://vuejs-resource-tutorial.firebaseio.com/data.json?id="+this.id)
               .then((response) => {
                 this.user = response.data[0];
               })

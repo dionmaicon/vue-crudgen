@@ -1,5 +1,5 @@
 const resource = {
-  endPoint: "http://localhost:3002/users/"
+  endPoint: "https://vuejs-resource-tutorial.firebaseio.com/data.json"
 }
 
 const model = (function() {

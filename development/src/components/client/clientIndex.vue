@@ -10,13 +10,13 @@
       <div class="breadcrumbs" v-if="!modal">
         <nav style="display: inline">
           <li><router-link :to="{name: 'home', params:{} }"> Home </router-link></li> /
-          <li><router-link class="breadcrumbs-active" :to="{name: 'user', params:{} }"> user </router-link></li>
+          <li><router-link class="breadcrumbs-active" :to="{name: 'client', params:{} }"> client </router-link></li>
         </nav>
       </div>
 
       <div class="row" v-if="!modal">
         <div class="col">
-          <router-link class="btn btn-primary create-button" :to="{ name: 'userCreate', params: {} }">Create <i class="fa fa-plus" aria-hidden="true"></i></router-link>
+          <router-link class="btn btn-primary create-button" :to="{ name: 'clientCreate', params: {} }">Create <i class="fa fa-plus" aria-hidden="true"></i></router-link>
         </div>
       </div>
 
@@ -49,8 +49,16 @@
         <table class="table table-striped" >
           <thead>
             <tr>
-                <th @click="sortBy('name')"> name <i style="float: right" class="fa fa-sort"> </i></th>
-<th @click="sortBy('birth')"> birth <i style="float: right" class="fa fa-sort"> </i></th>
+                <th @click="sortBy('id')"> id <i style="float: right" class="fa fa-sort"> </i></th>
+<th @click="sortBy('username')"> username <i style="float: right" class="fa fa-sort"> </i></th>
+<th @click="sortBy('touchedAt')"> touchedAt <i style="float: right" class="fa fa-sort"> </i></th>
+<th @click="sortBy('aNumber')"> aNumber <i style="float: right" class="fa fa-sort"> </i></th>
+<th @click="sortBy('bNumber')"> bNumber <i style="float: right" class="fa fa-sort"> </i></th>
+<th @click="sortBy('vali"date"Test')"> vali"date"Test <i style="float: right" class="fa fa-sort"> </i></th>
+<th @click="sortBy('validateCustom')"> validateCustom <i style="float: right" class="fa fa-sort"> </i></th>
+<th @click="sortBy('defaultValueBoolean')"> defaultValueBoolean <i style="float: right" class="fa fa-sort"> </i></th>
+<th @click="sortBy('createdAt')"> createdAt <i style="float: right" class="fa fa-sort"> </i></th>
+<th @click="sortBy('updateAt')"> updateAt <i style="float: right" class="fa fa-sort"> </i></th>
 
                 <th>
                   <div class="options-th">
@@ -60,19 +68,27 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(user, index) in userList" :key="index">
-              <td>{{user.name}}</td>
-<td>{{user.birth}}</td>
+            <tr v-for="(client, index) in clientList" :key="index">
+              <td>{{client.id}}</td>
+<td>{{client.username}}</td>
+<td>{{client.touchedAt}}</td>
+<td>{{client.aNumber}}</td>
+<td>{{client.bNumber}}</td>
+<td>{{client.validate}}</td>
+<td>{{client.validateCustom}}</td>
+<td>{{client.defaultValueBoolean}}</td>
+<td>{{client.createdAt}}</td>
+<td>{{client.updateAt}}</td>
 
     <td>
 
       <div class="options-button">
-        <button  class="btn btn-info" @click="view(user.id)" ><i class="fa fa-eye" aria-hidden="true"></i></button>
-        <button  class="btn btn-warning" @click="edit(user.id)" ><i class="fa fa-pencil" aria-hidden="true"></i></button>
-        <button  class="btn btn-danger" @click="remove(user.id)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+        <button  class="btn btn-info" @click="view(client.id)" ><i class="fa fa-eye" aria-hidden="true"></i></button>
+        <button  class="btn btn-warning" @click="edit(client.id)" ><i class="fa fa-pencil" aria-hidden="true"></i></button>
+        <button  class="btn btn-danger" @click="remove(client.id)"><i class="fa fa-trash" aria-hidden="true"></i></button>
       </div>
     </td>
-    
+
             </tr>
           </tbody>
         </table>
@@ -97,10 +113,10 @@
             numberPages: 0,
             numberRegisterForPage: 5
           },
-          userList: [],
+          clientList: [],
           mainList:[],
           modal: false,
-          columns: ["picture","message","partners","preference","gender"],
+          columns: [],
           sort: {
             key: null
           },
@@ -110,18 +126,18 @@
       methods: {
         view(id){
           this.modal = !this.modal;
-          this.$router.push({ name: 'userView', params: { id: id }})
+          this.$router.push({ name: 'clientView', params: { id: id }})
         },
         edit(id){
           this.modal = !this.modal;
-          this.$router.push({ name: "userEdit", params: { id: id }})
+          this.$router.push({ name: "clientEdit", params: { id: id }})
         },
         async remove(id){
-          let option = await this.$modal.show({title: "Danger", message: "Do you sure that want delete this user? This operation is irreversible!" , alert : "danger"});
+          let option = await this.$modal.show({title: "Danger", message: "Do you sure that want delete this client? This operation is irreversible!" , alert : "danger"});
           if(option){
             this.$http.delete("https://vuejs-resource-tutorial.firebaseio.com/data.json" + id)
               .then( response => {
-                this.$modal.show({title: "Success", message: "user was deleted with successfull!", alert: "info"});
+                this.$modal.show({title: "Success", message: "client was deleted with successfull!", alert: "info"});
                 this.getResources();
               }).catch(err => {
                   this.$modal.show({title: "Error", message: "Server response with error" + error, alert: "danger", type: 1});
@@ -164,16 +180,16 @@
           if(value > this.pagination.numberPages){
             this.pagination.current = this.pagination.numberPages;
           }
-          this.userList = this.mainList.slice((this.pagination.current * this.pagination.numberRegisterForPage), ((this.pagination.current * this.pagination.numberRegisterForPage) + this.pagination.numberRegisterForPage ));
+          this.clientList = this.mainList.slice((this.pagination.current * this.pagination.numberRegisterForPage), ((this.pagination.current * this.pagination.numberRegisterForPage) + this.pagination.numberRegisterForPage ));
         },
         'pagination.numberRegisterForPage': function(){
             this.pagination.current = -1;
         },
         'mainList': function(value){
-          this.userList = value.slice((this.pagination.current * this.pagination.numberRegisterForPage), ((this.pagination.current * this.pagination.numberRegisterForPage) + this.pagination.numberRegisterForPage ));
+          this.clientList = value.slice((this.pagination.current * this.pagination.numberRegisterForPage), ((this.pagination.current * this.pagination.numberRegisterForPage) + this.pagination.numberRegisterForPage ));
         },
         'search': function( text){
-          this.userList = this.mainList.filter( object => JSON.stringify(object).includes(text))
+          this.clientList = this.mainList.filter( object => JSON.stringify(object).includes(text))
         }
       },
       created(){
@@ -183,7 +199,7 @@
 
         this.getResources();
 
-        this.userList = this.mainList.slice(0,10);
+        this.clientList = this.mainList.slice(0,10);
         this.pagination.numberPages = parseInt(this.mainList.length / this.pagination.numberRegisterForPage);
       }
     }
@@ -261,5 +277,3 @@
     }
 
     </style>
-
-    

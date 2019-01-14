@@ -43,7 +43,7 @@ const View = class {
                    name="button"
                    class="btn btn-default"
                  >
-                   Back To List
+                   Back
                  </button>
                </div>
             </div>

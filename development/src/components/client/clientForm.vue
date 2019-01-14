@@ -1,60 +1,54 @@
 <template >
-        <div id="userForm" class="form">
+        <div id="clientForm" class="form">
           <form @submit.prevent="handleSubmit">
       	<div class="form-group">
-		<label for="name">name</label><br>
-	<input id="name" class="form-control"  value=""  required="true"  type="text"  v-model="user.name">
+		<label for="id">id</label><br>
+	<input id="id" class="form-control"  type="number"  required="false"  primaryKey="true"  autoIncrement="true"  v-model="client.id">
 
 </div>
 	<div class="form-group">
-		<label for="birth">birth</label><br>
-	<input id="birth" class="form-control"  value=""  required="true"  type="date"  v-model="user.birth">
+		<label for="username">username</label><br>
+	<input id="username" class="form-control"  type="text"  required="true"  v-model="client.username">
 
 </div>
 	<div class="form-group">
-		<label for="picture">picture</label><br>
-	<input type="file" id="picture"  v-on:change="pictureOnFileChange">
-</div>
-	<div class="form-group">
-		<label for="gender">gender</label><br>
-<div class="col-12">
-	<select id="gender" v-model="user.gender.selected" class="form-control" >
-		<option v-for="option in user.gender.options" :key="option.value" v-bind:value="option.value"> 
-			{{option.text}}
-		</option>
-	</select>
-</div>
-</div>
-	<div class="form-group">
-		<label for="message">message</label><br>
-	<textarea id="message" style="width: 100%" v-model="user.message" rows="10">You text here...</textarea>
+		<label for="touchedAt">touchedAt</label><br>
+	<input id="touchedAt" class="form-control"  type="date"  required="true"  v-model="client.touchedAt">
 
 </div>
 	<div class="form-group">
-		<label for="preference">preference</label><br>
-	<input type="radio" id="one" value="One" v-model="user.preference">
-	<label for="one">One</label><br>
-
-	<input type="radio" id="two" value="Two" v-model="user.preference">
-	<label for="two">Two</label><br>
-
-	<input type="radio" id="three" value="Three" v-model="user.preference">
-	<label for="three">Three</label><br>
+		<label for="aNumber">aNumber</label><br>
+	<input id="aNumber" class="form-control"  type="number"  required="true"  v-model="client.aNumber">
 
 </div>
 	<div class="form-group">
-		<label for="partners">partners</label><br>
-	<input type="checkbox" id="tryus" value="TryUs. Software" v-model="user.partners">
-	<label for="tryus">TryUs. Software</label><br>
+		<label for="bNumber">bNumber</label><br>
+	<input id="bNumber" class="form-control"  type="number"  required="true"  v-model="client.bNumber">
 
-	<input type="checkbox" id="twitter" value="Twitter" v-model="user.partners">
-	<label for="twitter">Twitter</label><br>
+</div>
+	<div class="form-group">
+		<label for="validate">vali"date"Test</label><br>
+	<input id="validate" class="form-control"  type="number"  required="true"  v-model="client.validate">
 
-	<input type="checkbox" id="google" value="Google" v-model="user.partners">
-	<label for="google">Google</label><br>
+</div>
+	<div class="form-group">
+		<label for="validateCustom">validateCustom</label><br>
+	<input id="validateCustom" class="form-control"  type="text"  required="false"  v-model="client.validateCustom">
 
-	<input type="checkbox" id="vuemastery" value="Vue Mastery" v-model="user.partners">
-	<label for="vuemastery">Vue Mastery</label><br>
+</div>
+	<div class="form-group">
+		<label for="defaultValueBoolean">defaultValueBoolean</label><br>
+	<input id="defaultValueBoolean" class="form-control"  type="boolean"  required="true"  defaultValue="1"  v-model="client.defaultValueBoolean">
+
+</div>
+	<div class="form-group">
+		<label for="createdAt">createdAt</label><br>
+	<input id="createdAt" class="form-control"  type="date"  required="false"  v-model="client.createdAt">
+
+</div>
+	<div class="form-group">
+		<label for="updateAt">updateAt</label><br>
+	<input id="updateAt" class="form-control"  type="date"  required="false"  v-model="client.updateAt">
 
 </div>
 
@@ -64,7 +58,7 @@
        </form>
         </div>
       </template>
-      
+
 <script>
   import {eventBus} from '../../main.js';
 
@@ -72,14 +66,17 @@
     props: ["id"],
     data () {
       return {
-        user: {
-          name: '',
-birth: '',
-picture_file: '',
-gender: {"options":[{"text":"Men","value":"M"},{"text":"Woman","value":"W"}]},
-message: '',
-preference: '',
-partners: [],
+        client: {
+          id: '',
+username: '',
+touchedAt: '',
+aNumber: '',
+bNumber: '',
+validate: '',
+validateCustom: '',
+defaultValueBoolean: '',
+createdAt: '',
+updateAt: '',
 
         }
       }
@@ -89,14 +86,7 @@ partners: [],
       this.setInstace();
     },
     methods: {
-      
-              pictureOnFileChange(e){
-                let files = e.target.files || e.dataTransfer.files;
-                if(files.length){
-                  this.user.picture = files[0];
-                }
-              },
-              
+
       async handleSubmit(){
         if(this.id){
           //Implements here your submit method UPDATE
@@ -107,10 +97,10 @@ partners: [],
           */
           let option = await this.$modal.show({title: "Warning", message: "Do you have sure that want complete this updated?", alert: "warning", type: 2});
           if (option){
-            this.$http.put("https://vuejs-resource-tutorial.firebaseio.com/data.json" + this.id, this.user)
+            this.$http.put("https://vuejs-resource-tutorial.firebaseio.com/data.json" + this.id, this.client)
             .then( (response) => {
               if (response.status == 200) {
-                  this.$modal.show({title: "Success", message: "user was updated with successfull!", alert: "success"});
+                  this.$modal.show({title: "Success", message: "client was updated with successfull!", alert: "success"});
                   this.goBack();
               }
 
@@ -123,10 +113,10 @@ partners: [],
           //Implements here your submit method CREATE
           let option = await this.$modal.show({title: "Warning", message: "Do you want to continue?", alert: "warning", type: 2});
           if (option){
-            this.$http.post("https://vuejs-resource-tutorial.firebaseio.com/data.json", this.user)
+            this.$http.post("https://vuejs-resource-tutorial.firebaseio.com/data.json", this.client)
             .then( (response) => {
                 if(response.status == 201){
-                  this.$modal.show({title: "Success", message: "user was created with successfull!", alert: "success"});
+                  this.$modal.show({title: "Success", message: "client was created with successfull!", alert: "success"});
                   this.goBack();
                 }
             }).catch(error => {
@@ -145,8 +135,8 @@ partners: [],
             .then(response => {
               let instance = response.data;
               for (var prop in instance) {
-                if (instance.hasOwnProperty(prop) && this.user.hasOwnProperty(prop)) {
-                  this.user[prop] = instance[prop];
+                if (instance.hasOwnProperty(prop) && this.client.hasOwnProperty(prop)) {
+                  this.client[prop] = instance[prop];
                 }
               }
             })
@@ -168,4 +158,3 @@ partners: [],
     overflow: hidden;
   }
 </style>
-
