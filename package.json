@@ -1,13 +1,17 @@
 {
-  "name": "crud-vuejs",
+  "name": "vue-crudgen",
   "version": "1.0.0",
-  "description": "CRUD (Create, Read, Update and Delete) basic gerenerator for Vue.js",
+  "description": "TryUs. Software CRUD (Create, Read, Update and Delete) basic gerenerator for Vue.js",
   "author": "Dion Maicon E. Duarte <dionmaicon@outlook.com>",
   "scripts": {
     "build": "webpack --mode production",
     "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup",
     "dev": "webpack --watch --mode development"
   },
+  "bin": {
+    "vue-crudgen": "./main.js"
+  },
+  "preferGlobal": true,
   "dependencies": {
     "axios": "^0.18.0",
     "bootstrap": "^4.2.1",

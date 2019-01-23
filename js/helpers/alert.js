@@ -2,7 +2,8 @@ const Alert = class {
   constructor() {}
 
   getTemplate() {
-    let template = `
+    return new Promise(resolve => {
+      let template = `
     <template >
       <div class="modal-mask">
         <div class="modal-wrapper">
@@ -15,14 +16,15 @@ const Alert = class {
               {{options.message}}
             </div>
 
-            <div class="footer" v-if="type == 1">
-              <button  @click="$emit('confirm', false)">Close</button>
+            <div class="row" v-if="type == 1">
+              <button class="btn btn-outline-secondary col" @click="$emit('confirm', false)">Close</button>
             </div>
 
-            <div class="footer" v-if="type == 2">
-              <button  @click="$emit('confirm', false)">Cancel</button>
-              <button  @click="$emit('confirm', true)">Ok</button>
+            <div class="row" v-if="type == 2">
+              <button class="btn btn-outline-secondary col-6"  @click="$emit('confirm', false)">Cancel</button>
+              <button class="btn btn-outline-dark col-6" @click="$emit('confirm', true)">Ok</button>
             </div>
+
 
           </div>
         </div>
@@ -125,7 +127,8 @@ const Alert = class {
     </style>
 
     `;
-    return template;
+      resolve(template);
+    });
   }
 };
 

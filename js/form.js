@@ -145,7 +145,7 @@ const Form = class {
       },
       setInstace(){
         if(this.id){
-          this.$http.get("${this.resource.endPoint}" + this.id)
+          this.$http.get("${this.resource.endPoint}?id=" + this.id)
             .then(response => {
               let instance = response.data;
               for (var prop in instance) {

@@ -13,9 +13,9 @@ const View = class {
           <div class="view">
             <div class="breadcrumbs">
               <nav style="display: inline">
-                <li><router-link :to="{name: 'home', params:{} }"> Home </router-link></li> /
-                <li><router-link :to="{name: '${this.modelName}', params:{} }"> ${this.modelName} </router-link></li>/
-                <li><router-link class="breadcrumbs-active" :to="{name: '${this.modelName}View', params:{id: id} }"> view ${this.modelName} </router-link></li>
+                <li class="liTitle" ><router-link :to="{name: 'home', params:{} }"> Home </router-link></li> /
+                <li class="liTitle" ><router-link :to="{name: '${this.modelName}', params:{} }"> ${this.modelName} </router-link></li>/
+                <li class="liTitle" ><router-link class="breadcrumbs-active" :to="{name: '${this.modelName}View', params:{id: id} }"> view ${this.modelName} </router-link></li>
               </nav>
             </div>
             <div class="row">
@@ -89,11 +89,14 @@ const View = class {
         }
         li {
           display: inline;
-          text-transform: capitalize;
+
           font-size: 0.8em;
         }
+        .liTitle {
+        text-transform: capitalize;
+        }
         .breadcrumbs {
-          background-color: #F1F1F1;
+          background-color: white;
         }
         .breadcrumbs-active {
           text-decoration: underline;
@@ -125,13 +128,13 @@ const View = class {
             continue;
         }
 
-        viewStruct += ` <li v-if="${this.modelName}.${prefix}"class="list-group-item"> <strong> ${prefix}: </strong>{{${this.modelName}.${prefix}}}</li> \n`;
+        viewStruct += ` <li v-if="${this.modelName}.${prefix}"class="list-group-item"> <span class="liTitle"> <strong> ${prefix}: </strong> </span>{{${this.modelName}.${prefix}}}</li> \n`;
 
       }
     }
     template = template.replace(`viewStruct`, viewStruct);
     return template;
   }
-}
+};
 
 module.exports = View;

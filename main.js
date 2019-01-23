@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const fs = require("fs");
 const path = require("path");
 const Create = require("./js/create.js");
@@ -8,11 +9,17 @@ const View = require("./js/view.js");
 const Router = require("./js/helpers/router.js");
 const Home = require("./js/helpers/home.js");
 const Alert = require("./js/helpers/alert.js");
+const MainFile = require("./js/helpers/mainFile.js");
+const App = require("./js/helpers/app.js");
+const Menu = require("./js/helpers/menu.js");
+
+const { exec } = require("child_process");
 
 const config = {
-  pathRoutes: "./",
-  pathComponents: "./components",
-  pathModels: "./"
+  pathRoutes: process.cwd(),
+  pathComponents: path.join(process.cwd(), "src/components"),
+  pathModels: process.cwd(),
+  uniqueFile: null
 };
 
 const createFolder = (name, basePath) => {
@@ -40,13 +47,19 @@ const initModels = async () => {
     let models = [];
     let files = fs.readdirSync(config.pathModels);
 
-    for (let i = 0; i < files.length; i++) {
-      let file = config.pathModels + "/" + files[i];
-      let name = path.basename(file, ".js");
-      models.push(name);
-      await createFiles(name, file);
+    if(config.uniqueFile == null) {
+      for (let i = 0; i < files.length; i++) {
+        let file = config.pathModels + "/" + files[i];
+        let name = path.basename(file, ".js");
+        models.push(name);
+        await createFiles(name, file);
+      }
+      return models;
+    } else {
+      let file = config.pathModels + "/" + config.uniqueFile + ".js";
+      await createFiles(config.uniqueFile, file);
     }
-    return models;
+    return null;
   } catch (e) {
     console.error(`Path to models looks bad. Try again with new path`);
     process.exit(-1);
@@ -55,7 +68,7 @@ const initModels = async () => {
 
 const createTemplateAlert = async () => {
   const alert = new Alert();
-  const alertTemplate = alert.getTemplate();
+  const alertTemplate = await alert.getTemplate();
   let basePath = config.pathRoutes;
   await createFolder("helpers", basePath);
   fs.writeFile(`${config.pathRoutes}/helpers/alert.vue`, alertTemplate, err => {
@@ -79,6 +92,30 @@ const createTemplateRouter = models => {
   });
 };
 
+const createTemplateMain = models => {
+  const mainF = new MainFile();
+  const mainTemplate = mainF.getTemplate();
+  fs.writeFile(`${config.pathRoutes}/main.js`, mainTemplate, err => {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log("Main file was create with success!");
+    }
+  });
+};
+
+const createTemplateApp = models => {
+  const app = new App();
+  const appTemplate = app.getTemplate();
+  fs.writeFile(`${config.pathRoutes}/App.vue`, appTemplate, err => {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log("App file was create with success!");
+    }
+  });
+};
+
 const createTemplateHome = models => {
   const home = new Home(models);
   const homeTemplate = home.getTemplate();
@@ -88,6 +125,19 @@ const createTemplateHome = models => {
       console.error(err);
     } else {
       console.log("Home template file was create with success!");
+    }
+  });
+};
+
+const createTemplateMenu = models => {
+  const menu = new Menu(models);
+  const menuTemplate = menu.getTemplate();
+
+  fs.writeFile(`${config.pathComponents}/menu.vue`, menuTemplate, err => {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log("Menu template file was create with success!");
     }
   });
 };
@@ -176,15 +226,61 @@ async function main() {
     process.exit(-1);
   }
 
-  config.pathModels = process.argv[2];
+  config.pathModels = path.join(process.cwd(), path.normalize(process.argv[2]));
+
+  //HELP
+  process.argv.forEach((val, index) => {
+    if (val == "-h" || val == "--help") {
+      console.log("\n\tTryUs. Software CRUD Generator Vue.js\n");
+      console.log("-h or --help \n\t  Help options. \n");
+      console.log("-c or --components \n\t  Path to generate components.\n");
+      console.log("-m or --models \n\t  Path to models source files.\n");
+      console.log("-r or --routes \n\t  Path to generate routes file.\n");
+      console.log("-v or --vue \n\t  Path to generate main.js and App.vue.\n");
+      process.exit(-1);
+    }
+  });
+  //Adjust params to App.vue and main.js files
+  process.argv.forEach((val, index) => {
+    if (val == "-v" || val == "--vue") {
+      if (process.argv[index + 1] == null) {
+        config.pathRoutes = process.cwd();
+      } else {
+        config.pathRoutes = path.join( process.cwd() , path.normalize(process.argv[index + 1]));
+      }
+      createTemplateApp();
+      createTemplateMain();
+    }
+  });
+
+  process.argv.forEach((val, index) => {
+    if (val == "-u" || val == "--unique") {
+      if (process.argv[index + 1] == null) {
+        console.error("Model not set.");
+        process.exit(-1);
+      } else {
+        config.uniqueFile = process.argv[index + 1];
+      }
+    }
+  });
 
   //Adjust params to components folder output
   process.argv.forEach((val, index) => {
-    if (val == "-c") {
+    if (val == "-c" || val == "--components") {
       if (process.argv[index + 1] == null) {
-        config.pathComponents = "./";
+        config.pathComponents = process.cwd();
       } else {
-        config.pathComponents = process.argv[index + 1];
+        config.pathComponents = path.join( process.cwd() , path.normalize(process.argv[index + 1]));
+      }
+    }
+  });
+
+  process.argv.forEach((val, index) => {
+    if (val == "-m" || val == "--models") {
+      if (process.argv[index + 1] == null) {
+        config.pathModels = process.cwd();
+      } else {
+        config.pathModels = path.join( process.cwd() , path.normalize(process.argv[index + 1]));
       }
     }
   });
@@ -193,19 +289,30 @@ async function main() {
 
   if (process.argv.length >= 3) {
     process.argv.forEach((val, index) => {
-      if (val == "-r") {
+      if (val == "-r" || val == "--routes") {
         if (process.argv[index + 1] == null) {
-          config.pathRoutes = "./";
+          config.pathRoutes = process.cwd();
         } else {
-          config.pathRoutes = process.argv[index + 1];
+          config.pathRoutes = path.join( process.cwd(), path.normalize(process.argv[index + 1]));
         }
         createTemplateRouter(models, config);
         createTemplateHome(models);
+        createTemplateMenu(models);
+        createTemplateMain();
+        createTemplateAlert();
       }
     });
   }
 
-  createTemplateAlert();
+  const child = exec(
+    "npx eslint --fix --ext=vue " + config.pathComponents + "/",
+    (error, stdout, stderr) => {
+      if (error) {
+        throw error;
+      }
+      console.log(stdout);
+    }
+  );
 }
 
 main();

@@ -232,7 +232,7 @@ const Index = class {
       font-size: 0.8em;
     }
     .breadcrumbs {
-      background-color: #F1F1F1;
+      background-color: white;
     }
     .breadcrumbs-active {
       text-decoration: underline;
