@@ -67,6 +67,60 @@ vue-crudgen -m models/ -c path-to-components/ -a path-to-sources-file/
 
 Vue crud Generator use eslint to prettier/vue code.
 
+Example: 
+```
+./
+├── package.json
+├── package-lock.json
+├── public
+│   ├── favicon.ico
+│   └── index.html
+├── README.md
+└── src
+    ├── assets
+    │   └── logo.png
+    ├── App.vue
+    ├── main.js
+    ├── router.js
+    ├── models
+    │   ├── user.js
+    
+```
+Execute in root of the project:
+
+vue-crudgen -m src/models/ -a src/
+
+Will be generate the follow:
+
+```
+./
+├── package.json
+├── package-lock.json
+├── public
+│   ├── favicon.ico
+│   └── index.html
+├── README.md
+└── src
+    ├── assets
+    │   └── logo.png
+    ├── components
+    │   ├── user
+    │   │   ├── userCreate.vue
+    │   │   ├── userEdit.vue
+    │   │   ├── userForm.vue
+    │   │   ├── userIndex.vue
+    │   │   └── userView.vue
+    │   ├── home.vue
+    │   └── menu.vue
+    ├── helpers
+    │   └── alert.vue
+    ├── App.vue
+    ├── main.js
+    ├── router.js
+    ├── models
+    │   ├── user.js
+    |
+```
 
 
 
