@@ -1,6 +1,6 @@
 {
   "name": "vue-crudgen",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "TryUs. Software CRUD (Create, Read, Update and Delete) basic generator for Vue.js",
   "author": "Dion Maicon E. Duarte <dionmaicon@outlook.com>",
   "scripts": {
@@ -19,7 +19,11 @@
     "popper.js": "^1.14.6",
     "vue": "^2.5.21",
     "vue-resource": "^1.5.1",
-    "vue-router": "^3.0.2"
+    "vue-router": "^3.0.2",
+    "eslint-config-prettier": "^3.3.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-vue": "^5.1.0",
+    "eslint": "^5.12.0"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
@@ -47,12 +51,12 @@
     "webpack-cli": "^3.2.1"
   },
   "bugs": {
-    "url": "https://github.com/dionmaicon/crud-vuejs/issues"
+    "url": "https://github.com/dionmaicon/vue-crudgen/issues"
   },
   "directories": {
     "test": "test"
   },
-  "homepage": "https://github.com/dionmaicon/crud-vuejs#readme",
+  "homepage": "https://github.com/dionmaicon/vue-crudgen#readme",
   "keywords": [
     "CRUD",
     "Vue.js",
@@ -63,6 +67,6 @@
   "main": "main.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dionmaicon/crud-vuejs.git"
+    "url": "git+https://github.com/dionmaicon/vue-crudgen.git"
   }
 }

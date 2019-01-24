@@ -80,6 +80,34 @@ const createTemplateAlert = async () => {
   });
 };
 
+createTemplateEslint = () =>{
+  let template =
+  `
+  module.exports = {
+    extends: [
+      //'eslint:recommended',
+      'plugin:vue/strongly-recommended',
+      'plugin:prettier/recommended'
+    ],
+    rules: {
+      // override/add rules settings here, such as:
+      // 'vue/no-unused-vars': 'error'
+    },
+    env:{
+      'browser': true,
+      'node': true
+    }
+  }
+  `
+  fs.writeFile("" + process.cwd() + "/.eslintrc.js", template, err => {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log("Router file was create with success!");
+    }
+  });
+}
+
 const createTemplateRouter = models => {
   const router = new Router(models);
   const routerTemplate = router.getTemplate();
@@ -227,7 +255,6 @@ async function main() {
   }
 
   config.pathModels = path.join(process.cwd(), path.normalize(process.argv[2]));
-
   //HELP
   process.argv.forEach((val, index) => {
     if (val == "-h" || val == "--help") {
@@ -235,8 +262,9 @@ async function main() {
       console.log("-h or --help \n\t  Help options. \n");
       console.log("-c or --components \n\t  Path to generate components.\n");
       console.log("-m or --models \n\t  Path to models source files.\n");
-      console.log("-r or --routes \n\t  Path to generate routes file.\n");
+      console.log("-a or --all \n\t  Path to src files. \n\tAll files necessary will be generate: Home.vue, Alert.vue, Menu.vue, main.js, etc.  \n");
       console.log("-v or --vue \n\t  Path to generate main.js and App.vue.\n");
+
       process.exit(-1);
     }
   });
@@ -289,22 +317,26 @@ async function main() {
 
   if (process.argv.length >= 3) {
     process.argv.forEach((val, index) => {
-      if (val == "-r" || val == "--routes") {
+      if (val == "-a" || val == "--all") {
         if (process.argv[index + 1] == null) {
           config.pathRoutes = process.cwd();
         } else {
           config.pathRoutes = path.join( process.cwd(), path.normalize(process.argv[index + 1]));
         }
-        createTemplateRouter(models, config);
-        createTemplateHome(models);
-        createTemplateMenu(models);
-        createTemplateMain();
-        createTemplateAlert();
+        if(config.uniqueFile == null){
+          createTemplateRouter(models, config);
+          createTemplateHome(models);
+          createTemplateMenu(models);
+          createTemplateMain();
+          createTemplateApp();
+          createTemplateAlert();
+          createTemplateEslint();
+        }
       }
     });
   }
 
-  const child = exec(
+  const child = exec (
     "npx eslint --fix --ext=vue " + config.pathComponents + "/",
     (error, stdout, stderr) => {
       if (error) {
