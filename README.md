@@ -72,10 +72,10 @@ module.exports = {model, resource}
 
 ```
 After create a model, execute at command line:
-
+```
 vue-crudgen -m models/ -c path-to-components/ -a path-to-sources-file/
-
-Vue crud Generator use eslint to prettier/vue code.
+```
+Vue crud Generator use eslint to prettier/vue code. Check dependencies.
 
 Example: 
 ```
