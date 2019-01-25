@@ -98,7 +98,9 @@ Example:
 ```
 Execute in root of the project:
 
+```
 vue-crudgen -m src/models/ -a src/
+```
 
 Will be generate the follow:
 
