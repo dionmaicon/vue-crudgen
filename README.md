@@ -1,12 +1,11 @@
 # vue-crudgen
 CRUD (Create, Read, Update and Delete) basic generator for Vue.js
 
-The focus this package is front-end with vue. The 4 main actions are completes.
+The focus this package is front-end with vue. The 4 main actions are complete.
 
-Some tips: 
+Some tips:
 
-Use an API like JSON-SERVER and listen in some port, inform your endPoint in resource const object. 
-Creates all files for models and run with option "-a" or "--all".
+Use an API like JSON-SERVER and listen in some port, inform your endPoint in resource const object. Create all files for models and run with option "-a" or "--all".
 
 
 ![vue-crudgen-laptop with hidpi screen](https://user-images.githubusercontent.com/19849921/51761375-05803080-20b4-11e9-9cab-055008397c32.png)
