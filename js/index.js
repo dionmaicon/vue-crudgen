@@ -77,7 +77,7 @@ const Index = class {
           </tbody>
         </table>
         </div>
-        <div class="pagination">
+        <div class="pagination" v-if="!modal">
             <button type="button" class="btn btn-default" @click="pagination.current = 0" name="button">First</button>
             <button type="button" class="btn btn-default" @click="pagination.current -= 1 " name="button"><i class="fa fa-backward"></i></button>
             <span>Page:<strong> {{pagination.current + 1}}  </strong></span>

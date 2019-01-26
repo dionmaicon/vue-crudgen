@@ -7,15 +7,29 @@ Some tips:
 
 Use an API like JSON-SERVER and listen in some port, inform your endPoint in resource const object. Create all files for models and run with option "-a" or "--all".
 
+REST endPoint pattern recommended, example:
+
+```
+endPoint: 'http://localhost:3002/users
+```
+
+Best practices for better RESTful API:
+
+![image](https://user-images.githubusercontent.com/19849921/51780016-45660880-20f2-11e9-9d59-dec28b1bc5aa.png)
+
+
+Result for a model generate for this tool:
 
 ![vue-crudgen-laptop with hidpi screen](https://user-images.githubusercontent.com/19849921/51761375-05803080-20b4-11e9-9cab-055008397c32.png)
 
+
+Ok Dion (me), but how create my frontend? I explain.
 ```
 mkdir models
 cd models
 touch user.js
 ```
-Files *.js models objects should be named in singular. 
+Files *.js models objects should be named in singular.
 
 ```javascript
 //user.js
@@ -77,7 +91,7 @@ vue-crudgen -m models/ -c path-to-components/ -a path-to-sources-file/
 ```
 Vue crud Generator use eslint to prettier/vue code. Check dependencies.
 
-Example: 
+Example:
 ```
 ./
 ├── package.json
@@ -94,7 +108,7 @@ Example:
     ├── router.js
     ├── models
     │   ├── user.js
-    
+
 ```
 Execute in root of the project:
 
@@ -139,4 +153,3 @@ Others screenshots
 
 ![vue-crudgen-create-iphone](https://user-images.githubusercontent.com/19849921/51761373-04e79a00-20b4-11e9-9adc-56a49384338f.png)
 ![vue-crud-gen iphone 6_7_8](https://user-images.githubusercontent.com/19849921/51761374-04e79a00-20b4-11e9-91e8-6457bd56c484.png)
-
