@@ -111,7 +111,7 @@ const Form = class {
           */
           let option = await this.$modal.show({title: "Warning", message: "Do you have sure that want complete this updated?", alert: "warning", type: 2});
           if (option){
-            this.$http.put("${this.resource.endPoint}" + this.id, this.${this.modelName})
+            this.$http.put("${this.resource.endPoint}/" + this.id, this.${this.modelName})
             .then( (response) => {
               if (response.status == 200) {
                   this.$modal.show({title: "Success", message: "${ this.modelName} was updated with successfull!", alert: "success"});
@@ -145,7 +145,7 @@ const Form = class {
       },
       setInstace(){
         if(this.id){
-          this.$http.get("${this.resource.endPoint}?id=" + this.id)
+          this.$http.get("${this.resource.endPoint}/" + this.id)
             .then(response => {
               let instance = response.data;
               for (var prop in instance) {

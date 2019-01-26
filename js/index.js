@@ -76,13 +76,13 @@ const Index = class {
             </tr>
           </tbody>
         </table>
+        </div>
         <div class="pagination">
             <button type="button" class="btn btn-default" @click="pagination.current = 0" name="button">First</button>
             <button type="button" class="btn btn-default" @click="pagination.current -= 1 " name="button"><i class="fa fa-backward"></i></button>
             <span>Page:<strong> {{pagination.current + 1}}  </strong></span>
             <button type="button" class="btn btn-default" @click="pagination.current += 1" name="button"><i class="fa fa-forward"></i></button>
             <button type="button" class="btn btn-default" @click="pagination.current = pagination.numberPages" name="button">Last</button>
-        </div>
         </div>
       </div>
     </template>
@@ -222,6 +222,9 @@ const Index = class {
     }
     .total-pages {
       float: right;
+    }
+    .pagination {
+      vertical-align: center;
     }
     .pagination button {
       margin: 2px;
