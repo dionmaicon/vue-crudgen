@@ -68,7 +68,7 @@ const View = class {
               this.$router.push({ name: "${this.modelName}Edit", params: { id: id }});
             },
             setInstace() {
-              this.$http.get("${this.resource.endPoint}/"+this.id)
+              this.$http.get(this.$endPoint.getUrlByName("${this.modelName}") + "/" + this.id)
               .then((response) => {
                 this.${this.modelName} = response.data;
               })

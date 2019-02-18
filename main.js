@@ -80,7 +80,7 @@ const createTemplateAlert = async () => {
   });
 };
 
-createTemplateEslint = () =>{
+const createTemplateEslint = () =>{
   let template =
   `
   module.exports = {
@@ -336,12 +336,13 @@ async function main() {
     });
   }
 
-  const child = exec (
+  const child = exec(
     "npx eslint --fix --ext=vue " + config.pathComponents + "/",
     (error, stdout, stderr) => {
-      if (error) {
-        throw error;
-      }
+      // if (error) {
+      //   throw error;
+      // }
+      // console.log(stdout);
       console.log(stdout);
     }
   );

@@ -5,23 +5,21 @@ const App = class {
     <template>
       <div id="app" class="container">
         <nav class="navbar sticky-top navbar-dark bg-light" >
-          <a  @click="show = !show" ><i
+          <a  @click="hide = !hide" ><i
             class="fa fa-bars"
           /></a>
-          <transition name="fade">
-            <menu-component @change="show = !show" v-if="show"></menu-component>
-          </transition>
+
         </nav>
+        <transition name="fade">
+          <menu-component @change="hide = !hide" v-if="hide"></menu-component>
+        </transition>
         <router-view v-if="!show"></router-view>
         <footer v-if="!show" >
           <nav class="navbar navbar-light bg-light" style="">
               <div  class="col-12" style="text-align: center">
                 <div class="mx-auto ">
-
-
                 <strong>Nossa localização</strong>
                   <p>Florianopolis</p>
-
                 <details >
                   <p>
                       Desenvolvido por: <a href="http://dionmaicon.github.io">@dionmaicon</a><br>

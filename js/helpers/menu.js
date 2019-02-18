@@ -6,10 +6,13 @@ const Menu = class {
   getTemplate() {
     let template = `
     <template >
-      <div id="nav" class="container">
-        <div @click="show()" > <router-link to="/">Home</router-link></div>
-          routesTemplate
-        <div style="min-height: 300px" @click="$emit('change')">
+      <div id="nav" class="menuComponent modal-mask">
+        <div class="modal-wrapper">
+          <div class="modal-container">
+            <div @click="show()" > <router-link to="/">Home</router-link></div>
+              routesTemplate
+            </div>
+          </div>
         </div>
       </div>
     </template>
@@ -32,6 +35,28 @@ const Menu = class {
       #nav {
         text-transform: capitalize;
         display: block;
+      }
+      .modal-mask {
+        position: fixed;
+        z-index: 9998;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.9);
+        display: table;
+        transition: opacity .7s ease;
+      }
+      .modal-wrapper {
+        display: table-cell;
+        vertical-align: middle;
+      }
+      .modal-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 2px;
+        transition: all .3s ease;
+        font-family: Helvetica, Arial, sans-serif;
       }
     </style>
     `;

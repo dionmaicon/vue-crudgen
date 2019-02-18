@@ -96,6 +96,7 @@ const Form = class {
       }
     },
     created(){
+      this.$endPoint.addUrl("${this.resource.prodPoint}","${this.resource.devPoint}", "${this.modelName}");
       eventBus.changeModalState();
       this.setInstace();
     },
@@ -111,7 +112,11 @@ const Form = class {
           */
           let option = await this.$modal.show({title: "Warning", message: "Do you have sure that want complete this updated?", alert: "warning", type: 2});
           if (option){
-            this.$http.put("${this.resource.endPoint}/" + this.id, this.${this.modelName})
+            let ${this.modelName} = this.${this.modelName};
+            //Uncomment and replace property for you select property
+            //${this.modelName}.property = this.${this.modelName}.property.selected;
+
+            this.$http.put(this.$endPoint.getUrlByName("${this.modelName}") + "/" + this.id, ${this.modelName})
             .then( (response) => {
               if (response.status == 200) {
                   this.$modal.show({title: "Success", message: "${ this.modelName} was updated with successfull!", alert: "success"});
@@ -127,7 +132,11 @@ const Form = class {
           //Implements here your submit method CREATE
           let option = await this.$modal.show({title: "Warning", message: "Do you want to continue?", alert: "warning", type: 2});
           if (option){
-            this.$http.post("${this.resource.endPoint}", this.${this.modelName})
+            let ${this.modelName} = this.${this.modelName};
+            //Uncomment and replace property for you select property
+            //${this.modelName}.property = this.${this.modelName}.property.selected;
+
+            this.$http.post(this.$endPoint.getUrlByName("${this.modelName}"), ${this.modelName})
             .then( (response) => {
                 if(response.status == 201){
                   this.$modal.show({title: "Success", message: "${this.modelName} was created with successfull!", alert: "success"});
@@ -145,11 +154,16 @@ const Form = class {
       },
       setInstace(){
         if(this.id){
-          this.$http.get("${this.resource.endPoint}/" + this.id)
+          this.$http.get(this.$endPoint.getUrlByName("${this.modelName}") + "/" + this.id)
             .then(response => {
               let instance = response.data;
               for (var prop in instance) {
                 if (instance.hasOwnProperty(prop) && this.${this.modelName}.hasOwnProperty(prop)) {
+                  //Uncomment  for select property
+                  //if(prop == "property_selected"){
+                  //  this.${this.modelName}[prop].selected = instance[prop];
+                  //  continue;
+                  //}
                   this.${this.modelName}[prop] = instance[prop];
                 }
               }
@@ -186,7 +200,7 @@ const Form = class {
         }
         else if( property.includes('checkbox')){
             dataScript += `${prefix}: [],\n`
-        }else if(property.includes('radio') || property.includes('textarea')){
+        }else if(property.includes('radio') || property.includes('textarea') || property.includes('file')){
             dataScript += `${prefix}: '',\n`
         }
         else{

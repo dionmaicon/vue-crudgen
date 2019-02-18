@@ -13,7 +13,7 @@ const Router = class {
 
     Vue.use(Router)
 
-    export default new Router({
+    let router =  new Router({
       // mode: 'history',
       base: process.env.BASE_URL,
       routes: [
@@ -26,6 +26,31 @@ const Router = class {
       ]
     })
 
+    const EndPoint = class  {
+
+      constructor(production) {
+        this.production = production;
+        this.prodEndPoints = [];
+        this.devEndPoints = [];
+      }
+      getAll() {
+        if(this.production) return this.prodEndPoints;
+        return this.devEndPoints;
+      }
+      getUrlByName(name) {
+        if (this.production) {
+          return this.prodEndPoints[name];
+        } else {
+          return this.devEndPoints[name];
+        }
+      }
+      addUrl(urlProd, urlDev, name) {
+        this.prodEndPoints[name] = urlProd;
+        this.devEndPoints[name] = urlDev;
+      }
+    };
+
+    export {router, EndPoint};
     `;
 
     let importModels = ``;
@@ -58,4 +83,5 @@ const Router = class {
     return template;
   }
 }
- module.exports = Router;
+
+module.exports = Router;

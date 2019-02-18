@@ -119,7 +119,7 @@ const Index = class {
         async remove(id){
           let option = await this.$modal.show({title: "Danger", message: "Do you sure that want delete this ${this.modelName}? This operation is irreversible!" , alert : "danger"});
           if(option){
-            this.$http.delete("${this.resource.endPoint}" + id)
+            this.$http.delete(this.$endPoint.getUrlByName("${this.modelName}") + "/" + id)
               .then( response => {
                 this.$modal.show({title: "Success", message: "${ this.modelName} was deleted with successfull!", alert: "info"});
                 this.getResources();
@@ -129,7 +129,7 @@ const Index = class {
           }
         },
         getResources () {
-          this.$http.get("${this.resource.endPoint}").then((response) => {
+          this.$http.get(this.$endPoint.getUrlByName("${this.modelName}")).then((response) => {
              this.mainList = response.data;
           })
         },
@@ -176,7 +176,10 @@ const Index = class {
           this.${this.modelName}List = this.mainList.filter( object => JSON.stringify(object).includes(text))
         }
       },
-      created(){
+      created() {
+
+        this.$endPoint.addUrl("${this.resource.prodPoint}","${this.resource.devPoint}", "${this.modelName}");
+
         eventBus.$on('modalHide', () => {
           this.modal = true;
         })

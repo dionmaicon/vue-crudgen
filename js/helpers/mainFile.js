@@ -6,10 +6,11 @@ const MainFile = class {
     import Vue from "vue";
     import axios from "axios";
     import App from "./App.vue";
-    import router from "./router.js";
+    import {router, EndPoint } from "./router.js";
     import alert from "./helpers/alert.vue";
 
     Vue.prototype.$http = axios;
+    Vue.prototype.$endPoint = new EndPoint(false);
 
     Vue.prototype.$modal = {
       show(options) {
