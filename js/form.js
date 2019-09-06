@@ -32,43 +32,43 @@ const Form = class {
         templateStruct += `\t<div class="form-group">\n\t\t<label for="${property}">${property}</label>\n`;
 
 
-        if (this.model.property.type == 'select') { //SELECT
+        if (this.model[property].type == 'select') { //SELECT
           templateStruct += `<div class="col-12">\n`
-          templateStruct += `\t<select id="${prefix}" v-model="${this.modelName}.${property}.selected" class="form-control" >\n`;
+          templateStruct += `\t<select id="${property}" v-model="${this.modelName}.${property}.selected" class="form-control" >\n`;
           templateStruct += `\t\t<option v-for="option in ${this.modelName}.${property}.options" :key="option.id" v-bind:value="option.id"> \n`;
           templateStruct += `\t\t\t{{option.value}}\n`;
           templateStruct += `\t\t</option>\n`;
           templateStruct += `\t</select>\n</div>\n`;
 
-        } else if (this.model.property.type == 'textarea') { //TEXTAREA
+        } else if (this.model[property].type == 'textarea') { //TEXTAREA
 
           templateStruct += `\t<textarea id="${property}" style="width: 100%" v-model="${this.modelName}.${property}" rows="10">You text here...</textarea>\n\n`;
 
-        } else if (this.model.property.type == 'radio') { //Radio buttons
+        } else if (this.model[property].type == 'radio') { //Radio buttons
 
-          for (var option of this.model.property.options) {
+          for (var option of this.model[property].options) {
               templateStruct += `\t<input type="radio" id="${option.id}" value="${option.value}" v-model="${this.modelName}.${property}">\n`
               templateStruct += `\t<label for="${option.id}">${option.value}</label><br>\n\n`
           }
 
-        } else if (this.model.property.type == 'checkbox') { //checkbox
+        } else if (this.model[property].type == 'checkbox') { //checkbox
 
-          for (var option of this.model.property.options) {
+          for (var option of this.model[property].options) {
               templateStruct += `\t<input type="checkbox" id="${option.id}" value="${option.value}" v-model="${this.modelName}.${property}">\n`
               templateStruct += `\t<label for="${option.id}">${option.value}</label><br>\n\n`
           }
 
-        } else if (this.model.property.type == 'file') { //TEXTAREA
+        } else if (this.model[property].type == 'file') { //TEXTAREA
               templateStruct += `\t<input type="file" id="${property}"  v-on:change="${property}OnFileChange">\n`
               countFiles++;
-        } else if (this.model.property.type == 'array') { //TEXTAREA
+        } else if (this.model[property].type == 'array') { //TEXTAREA
               templateStruct += `\t
               <select v-model="${this.modelName}.relations.${property}">\n
                 <option v-for="option in ${this.modelName}.${property}" v-bind:value="option.id">\n
-                  {{ option.${this.model.property.attribute} }}\n
+                  {{ option.${this.model[property].attribute} }}\n
                 </option>\n
               </select>\n`
-        } else if (this.model.property.type == 'html') { //TEXTAREA
+        } else if (this.model[property].type == 'html') { //TEXTAREA
               templateStruct += `\t
               <quill-editor
                 v-model="${this.modelName}.${property}"
@@ -76,15 +76,15 @@ const Form = class {
                 :options="{}"
               />
               \n`
-        } else if (this.model.property.type == 'currency') { //TEXTAREA
+        } else if (this.model[property].type == 'currency') { //TEXTAREA
               templateStruct += `\t
               <money
                 id="valorVenda"
                 class="form-control"
                 v-model.lazy="${this.modelName}.${property}"
               />\n`
-        } else if (this.model.property.type == 'object') { //TEXTAREA
-              templateStruct += `\t<input id="${property} class="form-control" v-model=""${this.modelName}.${property}.${this.model.property.attribute}">
+        } else if (this.model[property].type == 'object') { //TEXTAREA
+              templateStruct += `\t<input id="${property}" class="form-control" v-model="${this.modelName}.${property}.${this.model[property].attribute}">
               \n`
         } else {
               templateStruct += `\t<input id="${property}" class="form-control" `;
@@ -135,7 +135,7 @@ const Form = class {
           if (option){
             let ${this.modelName} = this.${this.modelName};
             //Uncomment and replace property for you select property
-            //${this.modelName}.property = this.${this.modelName}.property.selected;
+            //${this.modelName}.property = this.${this.modelName}[property].selected;
 
             this.$http.put(this.$endPoint.getUrlByName("${this.modelName}") + "/" + this.id, ${this.modelName})
             .then( (response) => {
@@ -155,7 +155,7 @@ const Form = class {
           if (option){
             let ${this.modelName} = this.${this.modelName};
             //Uncomment and replace property for you select property
-            //${this.modelName}.property = this.${this.modelName}.property.selected;
+            //${this.modelName}.property = this.${this.modelName}[property].selected;
 
             this.$http.post(this.$endPoint.getUrlByName("${this.modelName}"), ${this.modelName})
             .then( (response) => {
@@ -217,7 +217,7 @@ const Form = class {
 
         if (property.includes('hidden_fields')) continue; //If contains word hide continue loop for next iteration
 
-        if (this.model.property.type = 'html') {
+        if (this.model[property].type = 'html') {
           if (dataImport == '') {
             dataImport += `
             import "quill/dist/quill.core.css";
@@ -238,13 +238,13 @@ const Form = class {
 
         if (property.includes('hidden_fields')) continue; //If contains word hide continue loop for next iteration
 
-        if (this.model.property.type == 'select') {
+        if (this.model[property].type == 'select') {
             dataScript += `${property}: ${JSON.stringify(this.model[property])},\n`
-        } else if ( this.model.property.type == 'object') {
+        } else if ( this.model[property].type == 'object') {
             dataScript += `${property}: {},\n`
-        } else if ( this.model.property.type == 'checkbox' || this.model.property.type == 'array') {
+        } else if ( this.model[property].type == 'checkbox' || this.model[property].type == 'array') {
             dataScript += `${property}: [],\n`
-        } else if (this.model.property.type == 'radio' || this.model.property.type == 'textarea' || this.model.property.type == 'file') {
+        } else if (this.model[property].type == 'radio' || this.model[property].type == 'textarea' || this.model[property].type == 'file') {
             dataScript += `${property}: '',\n`
         } else {
             dataScript += `${property}: '',\n`
@@ -257,7 +257,7 @@ const Form = class {
     if (countFiles > 0) {
       for (var property in this.model) {
         if (this.model.hasOwnProperty(property)) {
-          if(this.model.property.type == 'file') {
+          if(this.model[property].type == 'file') {
               methodsScript += `
               ${property}OnFileChange(e){
                 let files = e.target.files || e.dataTransfer.files;
@@ -271,17 +271,17 @@ const Form = class {
       }
     }
 
-    dataTypes = `
+    let dataTypes = `
     if (property == dataSubType) {
       this.${this.modelName}[property].selected = instance[property];
       continue;
     }\n`;
 
-    dataSubTypes = ``;
+    let dataSubTypes = ``;
 
     for (var property in this.model) {
       if (this.model.hasOwnProperty(property)) {
-        if(this.model.property.type == 'select') {
+        if(this.model[property].type == 'select') {
             if(dataSubTypes == '') {
                 dataSubTypes += `${property} `;
             } else {
@@ -297,7 +297,6 @@ const Form = class {
       dataTypes = ``;
     }
 
-
     //Template Struct Buttons
     templateStruct +=
     `
@@ -311,7 +310,7 @@ const Form = class {
     script = script.replace(`methodsScript`, methodsScript);
     script = script.replace(`dataImport`, dataImport);
     script = script.replace(`dataComponent`, dataComponent);
-    srcipt = script.replace(`dataTypes`, dataTypes);
+    script = script.replace(`dataTypes`, dataTypes);
     return template + script ;
   }
 }
