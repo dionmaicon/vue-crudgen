@@ -8,6 +8,7 @@ const MainFile = class {
     import App from "./App.vue";
     import {router, EndPoint } from "./router.js";
     import alert from "./helpers/alert.vue";
+    import "bootstrap/dist/css/bootstrap.css";
 
     Vue.prototype.$http = axios;
     Vue.prototype.$endPoint = new EndPoint(false);

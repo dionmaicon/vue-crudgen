@@ -25,47 +25,68 @@ const Form = class {
     let countFiles = 0;
       //Template Struct
     for (var property in this.model) {
-      if(property.includes('hide')) continue; //if property includes 'hide'in your text  this loop skip once
+      if(property.includes('hidden_fields')) continue; //if property includes 'hide'in your text  this loop skip once
 
       if (this.model.hasOwnProperty(property)) {
-        let prefix = property.split("_")[0];
+        // types: number, text, select, currency, radio, checkbox, array, object, html
+        templateStruct += `\t<div class="form-group">\n\t\t<label for="${property}">${property}</label>\n`;
 
-        if(prefix){
-            templateStruct += `\t<div class="form-group">\n\t\t<label for="${prefix}">${prefix}</label><br>\n`;
-        }else{
-            templateStruct += `\t<div class="form-group">\n\t\t<label for="${property}">${property}</label>\n`;
-        }
 
-        if (property.includes('select')) { //SELECT
+        if (this.model.property.type == 'select') { //SELECT
           templateStruct += `<div class="col-12">\n`
-          templateStruct += `\t<select id="${prefix}" v-model="${this.modelName}.${prefix}.selected" class="form-control" >\n`;
-          templateStruct += `\t\t<option v-for="option in ${this.modelName}.${prefix}.options" :key="option.value" v-bind:value="option.value"> \n`;
-          templateStruct += `\t\t\t{{option.text}}\n`;
+          templateStruct += `\t<select id="${prefix}" v-model="${this.modelName}.${property}.selected" class="form-control" >\n`;
+          templateStruct += `\t\t<option v-for="option in ${this.modelName}.${property}.options" :key="option.id" v-bind:value="option.id"> \n`;
+          templateStruct += `\t\t\t{{option.value}}\n`;
           templateStruct += `\t\t</option>\n`;
           templateStruct += `\t</select>\n</div>\n`;
 
-        }else if (property.includes('textarea')) { //TEXTAREA
+        } else if (this.model.property.type == 'textarea') { //TEXTAREA
 
-          templateStruct += `\t<textarea id="${prefix}" style="width: 100%" v-model="${this.modelName}.${prefix}" rows="10">You text here...</textarea>\n\n`;
+          templateStruct += `\t<textarea id="${property}" style="width: 100%" v-model="${this.modelName}.${property}" rows="10">You text here...</textarea>\n\n`;
 
-        }else if (property.includes('radio')) { //Radio buttons
+        } else if (this.model.property.type == 'radio') { //Radio buttons
 
-          for (var option of this.model[property].options) {
-              templateStruct += `\t<input type="radio" id="${option.id}" value="${option.value}" v-model="${this.modelName}.${prefix}">\n`
+          for (var option of this.model.property.options) {
+              templateStruct += `\t<input type="radio" id="${option.id}" value="${option.value}" v-model="${this.modelName}.${property}">\n`
               templateStruct += `\t<label for="${option.id}">${option.value}</label><br>\n\n`
           }
 
-        }else if (property.includes('checkbox')) { //TEXTAREA
+        } else if (this.model.property.type == 'checkbox') { //checkbox
 
-          for (var option of this.model[property].options) {
-              templateStruct += `\t<input type="checkbox" id="${option.id}" value="${option.value}" v-model="${this.modelName}.${prefix}">\n`
+          for (var option of this.model.property.options) {
+              templateStruct += `\t<input type="checkbox" id="${option.id}" value="${option.value}" v-model="${this.modelName}.${property}">\n`
               templateStruct += `\t<label for="${option.id}">${option.value}</label><br>\n\n`
           }
 
-        }else if (property.includes('file')) { //TEXTAREA
-              templateStruct += `\t<input type="file" id="${prefix}"  v-on:change="${prefix}OnFileChange">\n`
+        } else if (this.model.property.type == 'file') { //TEXTAREA
+              templateStruct += `\t<input type="file" id="${property}"  v-on:change="${property}OnFileChange">\n`
               countFiles++;
-        }else {
+        } else if (this.model.property.type == 'array') { //TEXTAREA
+              templateStruct += `\t
+              <select v-model="${this.modelName}.relations.${property}">\n
+                <option v-for="option in ${this.modelName}.${property}" v-bind:value="option.id">\n
+                  {{ option.${this.model.property.attribute} }}\n
+                </option>\n
+              </select>\n`
+        } else if (this.model.property.type == 'html') { //TEXTAREA
+              templateStruct += `\t
+              <quill-editor
+                v-model="${this.modelName}.${property}"
+                ref="myQuillEditor"
+                :options="{}"
+              />
+              \n`
+        } else if (this.model.property.type == 'currency') { //TEXTAREA
+              templateStruct += `\t
+              <money
+                id="valorVenda"
+                class="form-control"
+                v-model.lazy="${this.modelName}.${property}"
+              />\n`
+        } else if (this.model.property.type == 'object') { //TEXTAREA
+              templateStruct += `\t<input id="${property} class="form-control" v-model=""${this.modelName}.${property}.${this.model.property.attribute}">
+              \n`
+        } else {
               templateStruct += `\t<input id="${property}" class="form-control" `;
               for (var htmlProp in this.model[property]) {
                 if (this.model[property].hasOwnProperty(htmlProp)) {
@@ -75,8 +96,6 @@ const Form = class {
               templateStruct += ` v-model="${this.modelName}.${property}">\n\n`;
         }
 
-
-
       }
       templateStruct += `</div>\n`
     }
@@ -85,6 +104,8 @@ const Form = class {
 `
 <script>
   import {eventBus} from '../../main.js';
+  dataImport
+
 
   export default {
     props: ["id"],
@@ -157,19 +178,18 @@ const Form = class {
           this.$http.get(this.$endPoint.getUrlByName("${this.modelName}") + "/" + this.id)
             .then(response => {
               let instance = response.data;
-              for (var prop in instance) {
-                if (instance.hasOwnProperty(prop) && this.${this.modelName}.hasOwnProperty(prop)) {
-                  //Uncomment  for select property
-                  //if(prop == "property_selected"){
-                  //  this.${this.modelName}[prop].selected = instance[prop];
-                  //  continue;
-                  //}
-                  this.${this.modelName}[prop] = instance[prop];
+              for (var property in instance) {
+                if (instance.hasOwnProperty(property) && this.${this.modelName}.hasOwnProperty(property)) {
+                  dataTypes
+                  this.${this.modelName}[property] = instance[property];
                 }
               }
             })
         }
       }
+    },
+    components: {
+      dataComponent
     }
   }
 </script>
@@ -189,37 +209,60 @@ const Form = class {
 
 `;
 
+    let dataImport = ``;
+    let dataComponent = ``;
+
+    for (var property in this.model) {
+      if (this.model.hasOwnProperty(property)) {
+
+        if (property.includes('hidden_fields')) continue; //If contains word hide continue loop for next iteration
+
+        if (this.model.property.type = 'html') {
+          if (dataImport == '') {
+            dataImport += `
+            import "quill/dist/quill.core.css";
+            import "quill/dist/quill.snow.css";
+            import "quill/dist/quill.bubble.css";
+
+            import { quillEditor } from "vue-quill-editor";`
+            dataComponent += 'quillEditor';
+          }
+        }
+      }
+    }
+
+
     let dataScript = ``;
     for (var property in this.model) {
       if (this.model.hasOwnProperty(property)) {
-        let prefix = property.split("_")[0];
-        if(property.includes('hide')) continue; //If contains word hide continue loop for next iteration
 
-        if(property.includes('select')){
-            dataScript += `${prefix}: ${JSON.stringify(this.model[property])},\n`
-        }
-        else if( property.includes('checkbox')){
-            dataScript += `${prefix}: [],\n`
-        }else if(property.includes('radio') || property.includes('textarea') || property.includes('file')){
-            dataScript += `${prefix}: '',\n`
-        }
-        else{
+        if (property.includes('hidden_fields')) continue; //If contains word hide continue loop for next iteration
+
+        if (this.model.property.type == 'select') {
+            dataScript += `${property}: ${JSON.stringify(this.model[property])},\n`
+        } else if ( this.model.property.type == 'object') {
+            dataScript += `${property}: {},\n`
+        } else if ( this.model.property.type == 'checkbox' || this.model.property.type == 'array') {
+            dataScript += `${property}: [],\n`
+        } else if (this.model.property.type == 'radio' || this.model.property.type == 'textarea' || this.model.property.type == 'file') {
+            dataScript += `${property}: '',\n`
+        } else {
             dataScript += `${property}: '',\n`
         }
       }
     }
 
     let methodsScript = ``;
-    if(countFiles > 0){
+
+    if (countFiles > 0) {
       for (var property in this.model) {
         if (this.model.hasOwnProperty(property)) {
-          if(property.includes('file')){
-              let prefix = property.split("_")[0];
+          if(this.model.property.type == 'file') {
               methodsScript += `
-              ${prefix}OnFileChange(e){
+              ${property}OnFileChange(e){
                 let files = e.target.files || e.dataTransfer.files;
                 if(files.length){
-                  this.${this.modelName}.${prefix} = files[0];
+                  this.${this.modelName}.${property} = files[0];
                 }
               },
               `;
@@ -227,6 +270,33 @@ const Form = class {
         }
       }
     }
+
+    dataTypes = `
+    if (property == dataSubType) {
+      this.${this.modelName}[property].selected = instance[property];
+      continue;
+    }\n`;
+
+    dataSubTypes = ``;
+
+    for (var property in this.model) {
+      if (this.model.hasOwnProperty(property)) {
+        if(this.model.property.type == 'select') {
+            if(dataSubTypes == '') {
+                dataSubTypes += `${property} `;
+            } else {
+              dataSubTypes += ` || ${property} \t`;
+            }
+        }
+      }
+    }
+
+    if (dataSubTypes != '') {
+      dataTypes = dataTypes.replace('dataSubType', dataSubTypes);
+    } else {
+      dataTypes = ``;
+    }
+
 
     //Template Struct Buttons
     templateStruct +=
@@ -239,6 +309,9 @@ const Form = class {
     let template = templateHTMLBegin + templateStruct + templateHTMLEnd;
     script = script.replace(`dataScript`,  dataScript);
     script = script.replace(`methodsScript`, methodsScript);
+    script = script.replace(`dataImport`, dataImport);
+    script = script.replace(`dataComponent`, dataComponent);
+    srcipt = script.replace(`dataTypes`, dataTypes);
     return template + script ;
   }
 }

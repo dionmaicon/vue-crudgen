@@ -114,22 +114,9 @@ const View = class {
     let viewStruct = '';
     for (var property in this.model) {
       if (this.model.hasOwnProperty(property)) {
-        let prefix;
-        if (property.includes('_')) {
-          prefix = property.split("_")[0];
-        }else {
-          prefix = property;
-        }
+        if(property.includes('hidden_fields')) continue;
 
-        if(property.includes('hide')) continue;
-
-        if(property.includes('select')) {
-            viewStruct += ` <li v-if="${this.modelName}.${prefix}" class="list-group-item"> <strong> ${prefix}: </strong>{{${this.modelName}.${prefix}.selected}}</li> \n`;
-            continue;
-        }
-
-        viewStruct += ` <li v-if="${this.modelName}.${prefix}"class="list-group-item"> <span class="liTitle"> <strong> ${prefix}: </strong> </span>{{${this.modelName}.${prefix}}}</li> \n`;
-
+        viewStruct += ` <li v-if="${this.modelName}.${property}"class="list-group-item"> <span class="liTitle"> <strong> ${property}: </strong> </span>{{${this.modelName}.${property}}}</li> \n`;
       }
     }
     template = template.replace(`viewStruct`, viewStruct);

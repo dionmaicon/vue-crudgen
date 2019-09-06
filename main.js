@@ -260,7 +260,7 @@ async function main() {
     if (val == "-h" || val == "--help") {
       console.log("\n\tTryUs. Software CRUD Generator Vue.js\n");
       console.log("-h or --help \n\t  Help options. \n");
-      console.log("-c or --components \n\t  Path to generate components.\n");
+      console.log("-c or --components \n\t  Path to gz components.\n");
       console.log("-m or --models \n\t  Path to models source files.\n");
       console.log("-a or --all \n\t  Path to src files. \n\tAll files necessary will be generate: Home.vue, Alert.vue, Menu.vue, main.js, etc.  \n");
       console.log("-v or --vue \n\t  Path to generate main.js and App.vue.\n");

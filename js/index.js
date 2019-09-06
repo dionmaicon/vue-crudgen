@@ -270,30 +270,22 @@ const Index = class {
 
     `;
 
-    let hide = this.model['hide'];
+    let hide = this.model['hidden_fields'];
 
-    if(hide != null){
-        templateHTMLBegin = templateHTMLBegin.replace('hide_columns', JSON.stringify(this.model['hide']));
-    }else{
+    if (hide != null) {
+        templateHTMLBegin = templateHTMLBegin.replace('hide_columns', JSON.stringify(this.model['hidden_fields']));
+    } else {
         templateHTMLBegin = templateHTMLBegin.replace('hide_columns', '[]');
     }
 
     for (var property in this.model) {
       if (this.model.hasOwnProperty(property)) {
-        let prefix;
-        if (property.includes('_')) {
-          prefix = property.split("_")[0];
-        }else {
-          prefix = property;
+        if (hide) {
+            if(hide.includes(property)) continue;
         }
-
-        if(hide){
-            if(hide.includes(prefix)) continue;
-            if(property.includes('hide')) continue;
-        }
-
-        templateStrucTableHead += `<th @click="sortBy('${prefix}')"> ${prefix} <i style="float: right" class="fa fa-sort"> </i></th>\n`;
-        templateStrucTableBody += `<td>{{${this.modelName}.${prefix}}}</td>\n`;
+        
+        templateStrucTableHead += `<th @click="sortBy('${property}')"> ${property} <i style="float: right" class="fa fa-sort"> </i></th>\n`;
+        templateStrucTableBody += `<td>{{${this.modelName}.${property}}}</td>\n`;
       }
     }
 
