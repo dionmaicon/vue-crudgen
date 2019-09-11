@@ -280,10 +280,13 @@ const Index = class {
 
     for (var property in this.model) {
       if (this.model.hasOwnProperty(property)) {
+
+        if (property.includes('hidden_fields')) continue; //If contains word hide continue loop for next iteration
+
         if (hide) {
             if(hide.includes(property)) continue;
         }
-        
+
         templateStrucTableHead += `<th @click="sortBy('${property}')"> ${property} <i style="float: right" class="fa fa-sort"> </i></th>\n`;
         templateStrucTableBody += `<td>{{${this.modelName}.${property}}}</td>\n`;
       }

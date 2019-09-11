@@ -28,7 +28,7 @@ const Form = class {
       if(property.includes('hidden_fields')) continue; //if property includes 'hide'in your text  this loop skip once
 
       if (this.model.hasOwnProperty(property)) {
-        // types: number, text, select, currency, radio, checkbox, array, object, html
+        // types: number, text, select, currency, radio, checkbox, oneToOne, object, html
         templateStruct += `\t<div class="form-group">\n\t\t<label for="${property}">${property}</label>\n`;
 
 
@@ -44,31 +44,35 @@ const Form = class {
 
           templateStruct += `\t<textarea id="${property}" style="width: 100%" v-model="${this.modelName}.${property}" rows="10">You text here...</textarea>\n\n`;
 
-        } else if (this.model[property].type == 'radio') { //Radio buttons
+        } else if (this.model[property].type == 'radio') {
 
           for (var option of this.model[property].options) {
               templateStruct += `\t<input type="radio" id="${option.id}" value="${option.value}" v-model="${this.modelName}.${property}">\n`
               templateStruct += `\t<label for="${option.id}">${option.value}</label><br>\n\n`
           }
 
-        } else if (this.model[property].type == 'checkbox') { //checkbox
+        } else if (this.model[property].type == 'checkbox') {
 
           for (var option of this.model[property].options) {
               templateStruct += `\t<input type="checkbox" id="${option.id}" value="${option.value}" v-model="${this.modelName}.${property}">\n`
               templateStruct += `\t<label for="${option.id}">${option.value}</label><br>\n\n`
           }
 
-        } else if (this.model[property].type == 'file') { //TEXTAREA
+        } else if (this.model[property].type == 'file') {
               templateStruct += `\t<input type="file" id="${property}"  v-on:change="${property}OnFileChange">\n`
               countFiles++;
-        } else if (this.model[property].type == 'array') { //TEXTAREA
-              templateStruct += `\t
-              <select v-model="${this.modelName}.relations.${property}">\n
-                <option v-for="option in ${this.modelName}.${property}" v-bind:value="option.id">\n
+        } else if (this.model[property].type == 'oneToOne' || this.model[property].type == 'oneToMany') {
+              templateStruct += `\t`
+              if (this.model[property].type == 'oneToOne') {
+                templateStruct += `<select v-model="${this.modelName}.relations.${property}">\n`;
+              } else {
+                templateStruct += `<select v-model="${this.modelName}.relations.${property}" multiple>\n`;
+              }
+              `<option v-for="option in ${this.modelName}.${property}" v-bind:value="option">\n
                   {{ option.${this.model[property].attribute} }}\n
                 </option>\n
-              </select>\n`
-        } else if (this.model[property].type == 'html') { //TEXTAREA
+              </select>\n`;
+        } else if (this.model[property].type == 'html') {
               templateStruct += `\t
               <quill-editor
                 v-model="${this.modelName}.${property}"
@@ -76,14 +80,14 @@ const Form = class {
                 :options="{}"
               />
               \n`
-        } else if (this.model[property].type == 'currency') { //TEXTAREA
+        } else if (this.model[property].type == 'currency') {
               templateStruct += `\t
               <money
                 id="valorVenda"
                 class="form-control"
                 v-model.lazy="${this.modelName}.${property}"
               />\n`
-        } else if (this.model[property].type == 'object') { //TEXTAREA
+        } else if (this.model[property].type == 'object') {
               templateStruct += `\t<input id="${property}" class="form-control" v-model="${this.modelName}.${property}.${this.model[property].attribute}">
               \n`
         } else {
@@ -112,6 +116,9 @@ const Form = class {
     data () {
       return {
         ${this.modelName}: {
+          relations: {
+            relationsScript
+          },
           dataScript
         }
       }
@@ -217,7 +224,7 @@ const Form = class {
 
         if (property.includes('hidden_fields')) continue; //If contains word hide continue loop for next iteration
 
-        if (this.model[property].type = 'html') {
+        if (this.model[property].type == 'html') {
           if (dataImport == '') {
             dataImport += `
             import "quill/dist/quill.core.css";
@@ -233,6 +240,8 @@ const Form = class {
 
 
     let dataScript = ``;
+    let relationsScript = ``;
+
     for (var property in this.model) {
       if (this.model.hasOwnProperty(property)) {
 
@@ -242,9 +251,12 @@ const Form = class {
             dataScript += `${property}: ${JSON.stringify(this.model[property])},\n`
         } else if ( this.model[property].type == 'object') {
             dataScript += `${property}: {},\n`
-        } else if ( this.model[property].type == 'checkbox' || this.model[property].type == 'array') {
+        } else if ( this.model[property].type == 'checkbox') {
             dataScript += `${property}: [],\n`
-        } else if (this.model[property].type == 'radio' || this.model[property].type == 'textarea' || this.model[property].type == 'file') {
+        } else if ( this.model[property].type == 'oneToOne' || this.model[property].type == 'oneToMany') {
+            relationsScript += `${property}: [],\n`
+            dataScript += `${property}: [],\n`
+        }else if (this.model[property].type == 'radio' || this.model[property].type == 'textarea' || this.model[property].type == 'file') {
             dataScript += `${property}: '',\n`
         } else {
             dataScript += `${property}: '',\n`
@@ -306,6 +318,7 @@ const Form = class {
     `;
 
     let template = templateHTMLBegin + templateStruct + templateHTMLEnd;
+    script = script.replace(`relationsScript`,  relationsScript);
     script = script.replace(`dataScript`,  dataScript);
     script = script.replace(`methodsScript`, methodsScript);
     script = script.replace(`dataImport`, dataImport);

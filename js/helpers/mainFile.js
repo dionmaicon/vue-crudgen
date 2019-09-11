@@ -9,6 +9,18 @@ const MainFile = class {
     import {router, EndPoint } from "./router.js";
     import alert from "./helpers/alert.vue";
     import "bootstrap/dist/css/bootstrap.css";
+    import money from "v-money";
+    import VueTheMask from "vue-the-mask";
+    import "./registerServiceWorker";
+
+    Vue.use(VueTheMask);
+
+    Vue.use(money, {
+      decimal: ",",
+      thousands: ".",
+      prefix: "R$ ",
+      precision: 2
+    });
 
     Vue.prototype.$http = axios;
     Vue.prototype.$endPoint = new EndPoint(false);
