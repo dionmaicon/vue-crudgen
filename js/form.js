@@ -32,15 +32,20 @@ const Form = class {
         templateStruct += `\t<div class="form-group">\n\t\t<label for="${property}">${property}</label>\n`;
 
 
-        if (this.model[property].type == 'select') { //SELECT
-          templateStruct += `<div class="col-12">\n`
-          templateStruct += `\t<select id="${property}" v-model="${this.modelName}.${property}.selected" class="form-control" >\n`;
-          templateStruct += `\t\t<option v-for="option in ${this.modelName}.${property}.options" :key="option.id" v-bind:value="option.id"> \n`;
-          templateStruct += `\t\t\t{{option.value}}\n`;
-          templateStruct += `\t\t</option>\n`;
-          templateStruct += `\t</select>\n</div>\n`;
+        if (this.model[property].type == 'select') {
+          templateStruct += `
+          <multiselect
+            v-model="${this.modelName}.${property}"
+            :options="${this.modelName}.relations.${property}"
+            :searchable="true"
+            :close-on-select="false"
+            :show-labels="false"
+            placeholder="Pick a value">
+            label="value"
+            track-by="value"
+            />\n`
 
-        } else if (this.model[property].type == 'textarea') { //TEXTAREA
+        } else if (this.model[property].type == 'textarea') {
 
           templateStruct += `\t<textarea id="${property}" style="width: 100%" v-model="${this.modelName}.${property}" rows="10">You text here...</textarea>\n\n`;
 
@@ -64,14 +69,32 @@ const Form = class {
         } else if (this.model[property].type == 'oneToOne' || this.model[property].type == 'oneToMany') {
               templateStruct += `\t`
               if (this.model[property].type == 'oneToOne') {
-                templateStruct += `<select v-model="${this.modelName}.relations.${property}">\n`;
+                templateStruct += `
+                <multiselect
+                  v-model="${this.modelName}.${property}"
+                  :options="${this.modelName}.relations.${property}"
+                  :searchable="true"
+                  :close-on-select="true"
+                  :show-labels="false"
+                  placeholder="Pick a value"
+                  label="${this.model[property].attribute}"
+                  track-by="${this.model[property].attribute}">
+                </multiselect>\n`;
               } else {
-                templateStruct += `<select v-model="${this.modelName}.relations.${property}" multiple>\n`;
+                templateStruct += `
+                <multiselect
+                  v-model="${this.modelName}.${property}"
+                  :options="${this.modelName}.relations.${property}"
+                  :multiple="true"
+                  :close-on-select="false"
+                  :clear-on-select="false"
+                  :preserve-search="true"
+                  placeholder="Pick some"
+                  label="${this.model[property].attribute}"
+                  track-by="${this.model[property].attribute}"
+                  >
+                  </multiselect>\n`;
               }
-              `<option v-for="option in ${this.modelName}.${property}" v-bind:value="option">\n
-                  {{ option.${this.model[property].attribute} }}\n
-                </option>\n
-              </select>\n`;
         } else if (this.model[property].type == 'html') {
               templateStruct += `\t
               <quill-editor
@@ -83,7 +106,7 @@ const Form = class {
         } else if (this.model[property].type == 'currency') {
               templateStruct += `\t
               <money
-                id="valorVenda"
+                id="value"
                 class="form-control"
                 v-model.lazy="${this.modelName}.${property}"
               />\n`
@@ -110,7 +133,6 @@ const Form = class {
   import {eventBus} from '../../main.js';
   dataImport
 
-
   export default {
     props: ["id"],
     data () {
@@ -125,6 +147,7 @@ const Form = class {
     },
     created(){
       this.$endPoint.addUrl("${this.resource.prodPoint}","${this.resource.devPoint}", "${this.modelName}");
+      relationsUrlsScript
       eventBus.changeModalState();
       this.setInstace();
     },
@@ -180,19 +203,22 @@ const Form = class {
       goBack(){
         this.$router.go(-1);
       },
-      setInstace(){
-        if(this.id){
+      setInstace() {
+        if  (this.id) {
           this.$http.get(this.$endPoint.getUrlByName("${this.modelName}") + "/" + this.id)
             .then(response => {
               let instance = response.data;
               for (var property in instance) {
                 if (instance.hasOwnProperty(property) && this.${this.modelName}.hasOwnProperty(property)) {
-                  dataTypes
                   this.${this.modelName}[property] = instance[property];
                 }
               }
             })
         }
+        this.setDependencies();
+      },
+      setDependencies() {
+        relationsFetchScript
       }
     },
     components: {
@@ -248,18 +274,46 @@ const Form = class {
         if (property.includes('hidden_fields')) continue; //If contains word hide continue loop for next iteration
 
         if (this.model[property].type == 'select') {
-            dataScript += `${property}: ${JSON.stringify(this.model[property])},\n`
+            relationsScript += `${property}: ${JSON.stringify(this.model[property].options)},\n`;
+            dataScript += `${property}: {},\n`
         } else if ( this.model[property].type == 'object') {
             dataScript += `${property}: {},\n`
         } else if ( this.model[property].type == 'checkbox') {
             dataScript += `${property}: [],\n`
-        } else if ( this.model[property].type == 'oneToOne' || this.model[property].type == 'oneToMany') {
+        } else if ( this.model[property].type == 'oneToOne') {
+            relationsScript += `${property}: [],\n`
+            dataScript += `${property}: {},\n`
+        } else if ( this.model[property].type == 'oneToMany') {
             relationsScript += `${property}: [],\n`
             dataScript += `${property}: [],\n`
         }else if (this.model[property].type == 'radio' || this.model[property].type == 'textarea' || this.model[property].type == 'file') {
             dataScript += `${property}: '',\n`
         } else {
             dataScript += `${property}: '',\n`
+        }
+      }
+    }
+
+
+    let relationsFetchScript = ``;
+    let relationsUrlsScript = ``;
+
+    for (var property in this.model) {
+      if (this.model.hasOwnProperty(property)) {
+
+        if (property.includes('hidden_fields')) continue;
+
+        if (this.model[property].type == 'oneToOne' || this.model[property].type == 'oneToMany') {
+            relationsUrlsScript += `
+              this.$endPoint.addUrl("${this.resource.prodPoint}","http://localhost:8081/${this.model[property].model}", "${this.model[property].model}");\n
+            `;
+            relationsFetchScript += `
+            this.$http.get(this.$endPoint.getUrlByName("${this.model[property].model}") + "/" + this.id)
+              .then(response => {
+                this.${this.modelName}.relations.${property} = response.data;
+              });
+            `;
+
         }
       }
     }
@@ -283,32 +337,6 @@ const Form = class {
       }
     }
 
-    let dataTypes = `
-    if (property == dataSubType) {
-      this.${this.modelName}[property].selected = instance[property];
-      continue;
-    }\n`;
-
-    let dataSubTypes = ``;
-
-    for (var property in this.model) {
-      if (this.model.hasOwnProperty(property)) {
-        if(this.model[property].type == 'select') {
-            if(dataSubTypes == '') {
-                dataSubTypes += `${property} `;
-            } else {
-              dataSubTypes += ` || ${property} \t`;
-            }
-        }
-      }
-    }
-
-    if (dataSubTypes != '') {
-      dataTypes = dataTypes.replace('dataSubType', dataSubTypes);
-    } else {
-      dataTypes = ``;
-    }
-
     //Template Struct Buttons
     templateStruct +=
     `
@@ -323,7 +351,9 @@ const Form = class {
     script = script.replace(`methodsScript`, methodsScript);
     script = script.replace(`dataImport`, dataImport);
     script = script.replace(`dataComponent`, dataComponent);
-    script = script.replace(`dataTypes`, dataTypes);
+    script = script.replace(`relationsUrlsScript`, relationsUrlsScript);
+    script = script.replace(`relationsFetchScript`, relationsFetchScript);
+
     return template + script ;
   }
 }

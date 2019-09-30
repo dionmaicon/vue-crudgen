@@ -8,13 +8,17 @@ const MainFile = class {
     import App from "./App.vue";
     import {router, EndPoint } from "./router.js";
     import alert from "./helpers/alert.vue";
-    import "bootstrap/dist/css/bootstrap.css";
     import money from "v-money";
     import VueTheMask from "vue-the-mask";
+    import Multiselect from "vue-multiselect";
     import "./registerServiceWorker";
 
-    Vue.use(VueTheMask);
+    import "bootstrap/dist/css/bootstrap.css";
+    import "vue-multiselect/dist/vue-multiselect.min.css";
 
+    Vue.component("multiselect", Multiselect);
+
+    Vue.use(VueTheMask);
     Vue.use(money, {
       decimal: ",",
       thousands: ".",
@@ -23,7 +27,7 @@ const MainFile = class {
     });
 
     Vue.prototype.$http = axios;
-    Vue.prototype.$endPoint = new EndPoint(false);
+    Vue.prototype.$endPoint = new EndPoint(process.env.NODE_ENV === "production");
 
     Vue.prototype.$modal = {
       show(options) {
