@@ -1,4 +1,6 @@
 /* eslint-disable */
+const capitalize = require('../libs/capitalize');
+
 const Edit = class {
   constructor(name, model, resource) {
     this.modelName = name;
@@ -6,9 +8,11 @@ const Edit = class {
     this.resource = resource;
   }
 
-  getTemplate(){
-    let templateHTMLBegin = `
-    <template>
+  getTemplate() {
+    let capitalizedName = capitalize(this.modelName);
+
+    let templateHTMLBegin =
+    `<template>
       <div class="${this.modelName}Edit">
         <div class="breadcrumbs">
           <nav style="display: inline">
@@ -23,7 +27,7 @@ const Edit = class {
     </template>
 
     <script>
-    import ${this.modelName}Form from './${this.modelName}Form.vue';
+    import ${capitalizedName}Form from './${capitalizedName}Form.vue';
 
     export default {
       name: '${this.modelName}',
@@ -33,7 +37,7 @@ const Edit = class {
         }
       },
       components: {
-        ${this.modelName}Form
+        ${capitalizedName}Form
       },
       created () {
           this.id = this.$route.params.id;
@@ -64,6 +68,6 @@ const Edit = class {
 
     return templateHTMLBegin;
   }
-}
+};
 
 module.exports = Edit;

@@ -1,6 +1,6 @@
 module.exports = {
   extends: [
-    //'eslint:recommended',
+    // 'eslint:recommended',
     'plugin:vue/strongly-recommended',
     'plugin:prettier/recommended'
   ],

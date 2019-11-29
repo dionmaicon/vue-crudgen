@@ -60,14 +60,7 @@ const Menu = class {
       }
     </style>
     `;
-    let routesTemplate = ``;
-    for (var i = 0; i < this.models.length; i++) {
-      routesTemplate += `<div @click="show()" ><router-link to="/${this.models[i]}">${
-        this.models[i]
-      }</router-link></div>\n`;
-    }
 
-    template = template.replace(`routesTemplate`, routesTemplate);
     return template;
   }
 };

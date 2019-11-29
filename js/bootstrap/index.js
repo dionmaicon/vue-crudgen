@@ -1,18 +1,21 @@
-/* eslint-disable */
+const capitalize = require("../libs/capitalize");
+const pluralize = require("pluralize");
+
 const Index = class {
-  constructor(name, model, resource){
+  constructor(name, model, resource) {
     this.modelName = name;
     this.model = model;
     this.resource = resource;
   }
 
-  getTemplate(){
+  getTemplate() {
     let templateStrucTableHead = ``;
     let templateStrucTableBody = ``;
 
-    let templateHTMLBegin =
-    `
-    <template>
+    let capitalizedName = capitalize(this.modelName);
+    let pluralizedAndCapitalizedName = pluralize(capitalizedName);
+
+    let templateHTMLBegin = `<template>
       <div class="index container">
 
       <transition name="fade">
@@ -77,18 +80,22 @@ const Index = class {
           </tbody>
         </table>
         </div>
-        <div class="pagination" v-if="!modal">
+        <div class="pagination row"  v-if="!modal">
+          <div class="col" >
             <button type="button" class="btn btn-default" @click="pagination.current = 0" name="button">First</button>
             <button type="button" class="btn btn-default" @click="pagination.current -= 1 " name="button"><i class="fa fa-backward"></i></button>
             <span>Page:<strong> {{pagination.current + 1}}  </strong></span>
             <button type="button" class="btn btn-default" @click="pagination.current += 1" name="button"><i class="fa fa-forward"></i></button>
             <button type="button" class="btn btn-default" @click="pagination.current = pagination.numberPages" name="button">Last</button>
+          </div>
         </div>
       </div>
     </template>
 
     <script>
-    import {eventBus} from '../../main.js'
+    import { eventBus } from '../../main.js'
+    import { mapActions, mapGetters } from "vuex";
+
     export default {
       data(){
         return {
@@ -107,7 +114,11 @@ const Index = class {
           search : ''
         }
       },
+      computed: {
+        ...mapGetters("${this.modelName}", ["${this.modelName}Processed", "get${pluralizedAndCapitalizedName}"]),
+      },
       methods: {
+        ...mapActions("${this.modelName}", ["delete${capitalizedName}", "fetch${pluralizedAndCapitalizedName}"]),
         view(id){
           this.modal = !this.modal;
           this.$router.push({ name: '${this.modelName}View', params: { id: id }})
@@ -119,9 +130,9 @@ const Index = class {
         async remove(id){
           let option = await this.$modal.show({title: "Danger", message: "Do you sure that want delete this ${this.modelName}? This operation is irreversible!" , alert : "danger"});
           if(option){
-            this.$http.delete(this.$endPoint.getUrlByName("${this.modelName}") + "/" + id)
+            this.delete${capitalizedName}(id)
               .then( response => {
-                this.$modal.show({title: "Success", message: "${ this.modelName} was deleted with successfull!", alert: "info"});
+                this.$modal.show({title: "Success", message: "${this.modelName} was deleted with successfull!", alert: "info"});
                 this.getResources();
               }).catch(err => {
                   this.$modal.show({title: "Error", message: "Server response with error" + error, alert: "danger", type: 1});
@@ -129,9 +140,17 @@ const Index = class {
           }
         },
         getResources () {
-          this.$http.get(this.$endPoint.getUrlByName("${this.modelName}")).then((response) => {
-             this.mainList = response.data;
-          })
+          if (this.${this.modelName}Processed) {
+            this.fetch${pluralizedAndCapitalizedName}()
+              .then(response => {
+                this.mainList = response;
+              })
+              .catch(error => {
+                this.$modal.show({title: "Error", message: "Server response with error" + error, alert: "danger", type: 1});
+              });
+          } else {
+            this.mainList = this.get${pluralizedAndCapitalizedName};
+          }
         },
         sortBy(param){
           if (this.sort.key == param){
@@ -148,17 +167,17 @@ const Index = class {
         }
       },
       watch: {
-        '$route' (to, from){
+        '$route' (to, from) {
           const toDepth = to.path.split('/').length
           const fromDepth = from.path.split('/').length
           this.modal = toDepth < fromDepth ? false : true
-          if(!this.modal){
+          if (!this.modal) {
             this.getResources();
           }
         },
         'pagination.current': function(value){
           this.pagination.numberPages = parseInt(this.mainList.length / this.pagination.numberRegisterForPage);
-          if(value < 1){
+          if (value < 1) {
             this.pagination.current = 0;
           }
           if(value > this.pagination.numberPages){
@@ -178,11 +197,9 @@ const Index = class {
       },
       created() {
 
-        this.$endPoint.addUrl("${this.resource.prodPoint}","${this.resource.devPoint}", "${this.modelName}");
-
         eventBus.$on('modalHide', () => {
           this.modal = true;
-        })
+        });
 
         this.getResources();
 
@@ -227,7 +244,11 @@ const Index = class {
       float: right;
     }
     .pagination {
+      width: 98%;
+      margin-left: auto;
+      margin-right: auto;
       vertical-align: center;
+      text-align: center;
     }
     .pagination button {
       margin: 2px;
@@ -270,21 +291,23 @@ const Index = class {
 
     `;
 
-    let hide = this.model['hidden_fields'];
+    let hide = this.model["hidden_fields"];
 
     if (hide != null) {
-        templateHTMLBegin = templateHTMLBegin.replace('hide_columns', JSON.stringify(this.model['hidden_fields']));
+      templateHTMLBegin = templateHTMLBegin.replace(
+        "hide_columns",
+        JSON.stringify(this.model["hidden_fields"])
+      );
     } else {
-        templateHTMLBegin = templateHTMLBegin.replace('hide_columns', '[]');
+      templateHTMLBegin = templateHTMLBegin.replace("hide_columns", "[]");
     }
 
     for (var property in this.model) {
       if (this.model.hasOwnProperty(property)) {
-
-        if (property.includes('hidden_fields')) continue; //If contains word hide continue loop for next iteration
+        if (property.includes("hidden_fields")) continue; //If contains word hide continue loop for next iteration
 
         if (hide) {
-            if(hide.includes(property)) continue;
+          if (hide.includes(property)) continue;
         }
 
         templateStrucTableHead += `<th @click="sortBy('${property}')"> ${property} <i style="float: right" class="fa fa-sort"> </i></th>\n`;
@@ -292,8 +315,7 @@ const Index = class {
       }
     }
 
-    templateStrucTableBody +=
-    `
+    templateStrucTableBody += `
     <td>
 
       <div class="options-button">
@@ -304,11 +326,17 @@ const Index = class {
     </td>
     `;
 
-    templateHTMLBegin = templateHTMLBegin.replace('templateStrucTableHead', templateStrucTableHead);
-    templateHTMLBegin = templateHTMLBegin.replace('templateStrucTableBody', templateStrucTableBody);
+    templateHTMLBegin = templateHTMLBegin.replace(
+      "templateStrucTableHead",
+      templateStrucTableHead
+    );
+    templateHTMLBegin = templateHTMLBegin.replace(
+      "templateStrucTableBody",
+      templateStrucTableBody
+    );
 
     return templateHTMLBegin;
   }
-}
+};
 
 module.exports = Index;

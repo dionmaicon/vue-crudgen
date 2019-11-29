@@ -24,8 +24,6 @@ const Alert = class {
               <button class="btn btn-outline-secondary col-6"  @click="$emit('confirm', false)">Cancel</button>
               <button class="btn btn-outline-dark col-6" @click="$emit('confirm', true)">Ok</button>
             </div>
-
-
           </div>
         </div>
       </div>
@@ -91,7 +89,7 @@ const Alert = class {
         }
 
       },
-      async mounted(){
+      async mounted() {
         await this.setAlertType();
         await this.setTime();
       }
@@ -125,7 +123,6 @@ const Alert = class {
       font-family: Helvetica, Arial, sans-serif;
     }
     </style>
-
     `;
       resolve(template);
     });
