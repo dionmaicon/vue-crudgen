@@ -23,7 +23,7 @@ const Module = class {
 
     const state = {
       ${pluralizedName}: [],
-      processed
+      processed: false
     };
 
     const getters = {
@@ -31,7 +31,7 @@ const Module = class {
         return state.${pluralizedName};
       },
       ${this.config.name}Processed(state){
-        this.state.processed;
+        state.processed;
       }
     };
 

@@ -148,7 +148,7 @@ const Form = class {
       this.setInstace();
     },
     methods: {
-      ...mapActions("${this.modelName}", ["create${capitalizedName}", "update${capitalizedName}"])
+      ...mapActions("${this.modelName}", ["create${capitalizedName}", "update${capitalizedName}"]),
       methodsScript
       async handleSubmit() {
         if (this.id) {
