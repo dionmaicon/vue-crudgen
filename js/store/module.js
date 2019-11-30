@@ -31,7 +31,7 @@ const Module = class {
         return state.${pluralizedName};
       },
       ${this.config.name}Processed(state){
-        state.processed;
+        return state.processed;
       }
     };
 
