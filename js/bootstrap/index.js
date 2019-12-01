@@ -15,7 +15,7 @@ const Index = class {
     let capitalizedName = capitalize(this.modelName);
     let pluralizedAndCapitalizedName = pluralize(capitalizedName);
 
-    let templateHTMLBegin = `<template>
+    let templateHTMLStart = `<template>
       <div class="index container">
 
       <transition name="fade">
@@ -140,7 +140,7 @@ const Index = class {
           }
         },
         getResources () {
-          if (this.${this.modelName}Processed) {
+          if (this.${this.modelName}Processed || this.mainList.length === 0) {
             this.fetch${pluralizedAndCapitalizedName}()
               .then(response => {
                 this.mainList = response;
@@ -294,21 +294,27 @@ const Index = class {
     let hide = this.model["hidden_fields"];
 
     if (hide != null) {
-      templateHTMLBegin = templateHTMLBegin.replace(
+      templateHTMLStart = templateHTMLStart.replace(
         "hide_columns",
         JSON.stringify(this.model["hidden_fields"])
       );
     } else {
-      templateHTMLBegin = templateHTMLBegin.replace("hide_columns", "[]");
+      templateHTMLStart = templateHTMLStart.replace("hide_columns", "[]");
     }
 
     for (var property in this.model) {
       if (this.model.hasOwnProperty(property)) {
-        if (property.includes("hidden_fields")) continue; //If contains word hide continue loop for next iteration
+        if (property.includes("hidden_fields")) continue;
 
         if (hide) {
           if (hide.includes(property)) continue;
         }
+
+        if (
+          this.model[property].type === "oneToMany" ||
+          this.model[property].type === "oneToOne"
+        )
+          continue;
 
         templateStrucTableHead += `<th @click="sortBy('${property}')"> ${property} <i style="float: right" class="fa fa-sort"> </i></th>\n`;
         templateStrucTableBody += `<td>{{${this.modelName}.${property}}}</td>\n`;
@@ -317,25 +323,30 @@ const Index = class {
 
     templateStrucTableBody += `
     <td>
-
       <div class="options-button">
-        <button  class="btn btn-info" @click="view(${this.modelName}.id)" ><i class="fa fa-eye" aria-hidden="true"></i></button>
-        <button  class="btn btn-warning" @click="edit(${this.modelName}.id)" ><i class="fa fa-pencil" aria-hidden="true"></i></button>
-        <button  class="btn btn-danger" @click="remove(${this.modelName}.id)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+        <button class="btn btn-info" @click="view(${this.modelName}.id)" >
+          <i class="fa fa-eye" aria-hidden="true"></i>
+        </button>
+        <button class="btn btn-warning" @click="edit(${this.modelName}.id)" >
+          <i class="fa fa-edit" aria-hidden="true"></i>
+        </button>
+        <button class="btn btn-danger" @click="remove(${this.modelName}.id)">
+          <i class="fa fa-trash" aria-hidden="true"></i>
+        </button>
       </div>
     </td>
     `;
 
-    templateHTMLBegin = templateHTMLBegin.replace(
+    templateHTMLStart = templateHTMLStart.replace(
       "templateStrucTableHead",
       templateStrucTableHead
     );
-    templateHTMLBegin = templateHTMLBegin.replace(
+    templateHTMLStart = templateHTMLStart.replace(
       "templateStrucTableBody",
       templateStrucTableBody
     );
 
-    return templateHTMLBegin;
+    return templateHTMLStart;
   }
 };
 

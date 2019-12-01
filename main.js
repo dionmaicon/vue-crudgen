@@ -122,30 +122,31 @@ const createTemplates = async (name, model, resource) => {
 
 const InstallLocalDependecies = async () => {
   try {
-    // if (config.bootstrap) {
-    //   const child = exec(
-    //     "npm install --save bootstrap axios v-money vue-the-mask vue-multiselect vuex-persist",
-    //     (error, stdout, stderr) => {
-    //       if (error) {
-    //         console.error(error);
-    //       }
-    //       console.log(stdout);
-    //     }
-    //   );
-    // } else {
-    //   config.frontend = "vuetify";
-    //   const child = exec(
-    //     "npm install --save vuetify axios v-money vue-the-mask vue-multiselect vuex-persist",
-    //     (error, stdout, stderr) => {
-    //       if (error) {
-    //         console.error(error);
-    //       }
-    //       console.log(stdout);
-    //     }
-    //   );
-    // }
+    if (config.bootstrap) {
+      const child = exec(
+        `npm install --save bootstrap axios v-money vue-the-mask vue-multiselect
+         vuex-persist vue-json-pretty @fortawesome/fontawesome-free`,
+        (error, stdout, stderr) => {
+          if (error) {
+            console.error(error);
+          }
+          console.log(stdout);
+        }
+      );
+    } else {
+      config.frontend = "vuetify";
+      const child = exec(
+        "npm install --save vuetify axios v-money vue-the-mask vue-multiselect vuex-persist vue-json-pretty",
+        (error, stdout, stderr) => {
+          if (error) {
+            console.error(error);
+          }
+          console.log(stdout);
+        }
+      );
+    }
   } catch (e) {
-    console.error(`Models cann't to be generate, we have some problem.`);
+    console.error(`Models cannot to be generate, we have problems here.`);
     console.error(e);
   }
 };

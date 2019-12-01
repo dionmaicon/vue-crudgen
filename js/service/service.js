@@ -21,7 +21,7 @@ const Service = class {
 
     const create${name} = ${this.config.name} => service.post(END_POINT,  ${this.config.name} );
 
-    const update${name} = ${this.config.name} => service.put(END_POINT  + "/" + id,  ${this.config.name} );
+    const update${name} = ${this.config.name} => service.put(END_POINT  + "/" + ${this.config.name}.id,  ${this.config.name} );
 
     const delete${name} = id => service.delete(END_POINT  + "/" + id);
 

@@ -122,7 +122,22 @@ const View = class {
       if (this.model.hasOwnProperty(property)) {
         if (property.includes("hidden_fields")) continue;
 
-        viewStruct += ` <li v-if="${this.modelName}.${property}"class="list-group-item"> <span class="liTitle"> <strong> ${property}: </strong> </span>{{${this.modelName}.${property}}}</li> \n`;
+        if (this.model[property].type === "oneToMany" || this.model[property].type === "oneToOne") {
+          viewStruct += `
+          <li v-if="${this.modelName}.${property}" class="list-group-item">
+            <vue-json-pretty :data="${this.modelName}.${property}" :showDoubleQuotes="false"
+            >
+            </vue-json-pretty>
+          </li> \n`;
+             continue;
+        }
+
+        viewStruct += `
+        <li v-if="${this.modelName}.${property}" class="list-group-item">
+          <span class="liTitle">
+            <strong> ${property}: </strong>
+          </span>{{${this.modelName}.${property}}}
+        </li> \n`;
       }
     }
     template = template.replace(`viewStruct`, viewStruct);

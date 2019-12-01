@@ -43,7 +43,7 @@ const Module = class {
             )
               .then(response => {
                 commit("SET_${pluralizedAndUpperCaseName}", response.data);
-                resolve(response);
+                resolve(response.data);
               })
               .catch(error => {
                 reject(error);

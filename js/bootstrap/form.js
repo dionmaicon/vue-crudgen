@@ -197,6 +197,7 @@ const Form = class {
       },
       setInstace() {
         if (this.id) {
+          this.${this.modelName}.id = this.id;
           get${capitalizedName}(this.id)
             .then(response => {
               let instance = response.data;
