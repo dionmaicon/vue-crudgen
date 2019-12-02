@@ -23,64 +23,64 @@ const Index = class {
         </router-view>
       </transition>
 
-      <div class="breadcrumbs" v-if="!modal">
-        <nav style="display: inline">
-          <li><router-link :to="{name: 'home', params:{} }"> Home </router-link></li> /
-          <li><router-link class="breadcrumbs-active" :to="{name: '${this.modelName}', params:{} }"> ${this.modelName} </router-link></li>
-        </nav>
-      </div>
-
-      <div class="row" v-if="!modal">
-        <div class="col">
-          <router-link class="btn btn-primary create-button" :to="{ name: '${this.modelName}Create', params: {} }">Create <i class="fa fa-plus" aria-hidden="true"></i></router-link>
+      <div v-if="showIndexPage">
+        <div class="breadcrumbs">
+          <nav style="display: inline">
+            <li><router-link :to="{name: 'home', params:{} }"> Home </router-link></li> /
+            <li><router-link class="breadcrumbs-active" :to="{name: '${this.modelName}', params:{} }"> ${this.modelName} </router-link></li>
+          </nav>
         </div>
-      </div>
 
-      <div class="row" v-if="!modal">
-        <div class="form-group has-search col" v-if="!modal">
-            <span class="fa fa-search form-control-feedback"></span>
-            <input type="text" v-model="search" class="form-control search">
-        </div>
-        <div class="col">
-          <div  class="input-group">
-            <div class="input-group-prepend">
-              <div class="input-group-text">Show</div>
-            </div>
-              <select v-model="pagination.numberRegisterForPage" id="inlineFormInputGroup" class="form-control" >
-                <option v-for="n in [5,10,25,50,100]" :key="n" v-bind:value="n">
-                  {{n}}
-                </option>
-              </select>
+        <div class="row">
+          <div class="col">
+            <router-link class="btn btn-primary create-button" :to="{ name: '${this.modelName}Create', params: {} }">Create <i class="fa fa-plus" aria-hidden="true"></i></router-link>
           </div>
         </div>
 
-      </div>
+        <div class="row">
+          <div class="form-group has-search col">
+              <span class="fa fa-search form-control-feedback"></span>
+              <input type="text" v-model="search" class="form-control search">
+          </div>
+          <div class="col">
+            <div  class="input-group">
+              <div class="input-group-prepend">
+                <div class="input-group-text">Show</div>
+              </div>
+                <select v-model="pagination.numberRegisterForPage" id="inlineFormInputGroup" class="form-control" >
+                  <option v-for="n in [5,10,25,50,100]" :key="n" v-bind:value="n">
+                    {{n}}
+                  </option>
+                </select>
+            </div>
+          </div>
+        </div>
 
-      <div class="table-container" v-if="!modal">
-        <div class="total-pages col">
-        <small v-if="mainList.length > 0">Total {{mainList.length}} entryes.</small>
-        <small v-else >Not found entryes or server response.</small>
-        <small v-if="search != ''"> Searching term for: "{{search}}"</small>
+        <div class="table-container">
+          <div class="total-pages col">
+            <small v-if="mainList.length > 0">Total {{mainList.length}} entryes.</small>
+            <small v-else >Not found entryes or server response.</small>
+            <small v-if="search != ''"> Searching term for: "{{search}}"</small>
+          </div>
+          <table class="table table-striped" >
+            <thead>
+              <tr>
+                  templateStrucTableHead
+                  <th>
+                    <div class="options-th">
+                      Options
+                    </div>
+                  </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(${this.modelName}, index) in ${this.modelName}List" :key="index">
+                templateStrucTableBody
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <table class="table table-striped" >
-          <thead>
-            <tr>
-                templateStrucTableHead
-                <th>
-                  <div class="options-th">
-                    Options
-                  </div>
-                </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(${this.modelName}, index) in ${this.modelName}List" :key="index">
-              templateStrucTableBody
-            </tr>
-          </tbody>
-        </table>
-        </div>
-        <div class="pagination row"  v-if="!modal">
+        <div class="pagination row">
           <div class="col" >
             <button type="button" class="btn btn-default" @click="pagination.current = 0" name="button">First</button>
             <button type="button" class="btn btn-default" @click="pagination.current -= 1 " name="button"><i class="fa fa-backward"></i></button>
@@ -90,7 +90,8 @@ const Index = class {
           </div>
         </div>
       </div>
-    </template>
+    </div>
+  </template>
 
     <script>
     import { eventBus } from '../../main.js'
@@ -106,7 +107,7 @@ const Index = class {
           },
           ${this.modelName}List: [],
           mainList:[],
-          modal: false,
+          showIndexPage: true,
           columns: hide_columns,
           sort: {
             key: null
@@ -120,11 +121,9 @@ const Index = class {
       methods: {
         ...mapActions("${this.modelName}", ["delete${capitalizedName}", "fetch${pluralizedAndCapitalizedName}"]),
         view(id){
-          this.modal = !this.modal;
           this.$router.push({ name: '${this.modelName}View', params: { id: id }})
         },
         edit(id){
-          this.modal = !this.modal;
           this.$router.push({ name: "${this.modelName}Edit", params: { id: id }})
         },
         async remove(id){
@@ -167,14 +166,6 @@ const Index = class {
         }
       },
       watch: {
-        '$route' (to, from) {
-          const toDepth = to.path.split('/').length
-          const fromDepth = from.path.split('/').length
-          this.modal = toDepth < fromDepth ? false : true
-          if (!this.modal) {
-            this.getResources();
-          }
-        },
         'pagination.current': function(value){
           this.pagination.numberPages = parseInt(this.mainList.length / this.pagination.numberRegisterForPage);
           if (value < 1) {
@@ -196,15 +187,19 @@ const Index = class {
         }
       },
       created() {
-
-        eventBus.$on('modalHide', () => {
-          this.modal = true;
-        });
-
         this.getResources();
 
         this.${this.modelName}List = this.mainList.slice(0,10);
         this.pagination.numberPages = parseInt(this.mainList.length / this.pagination.numberRegisterForPage);
+      },
+      beforeRouteUpdate(to, from, next) {
+        const toDepth = to.path.split("/").length;
+        const fromDepth = from.path.split("/").length;
+        this.showIndexPage = toDepth < fromDepth;
+        if (!this.showIndexPage) {
+          this.getResources();
+        }
+        next();
       }
     }
     </script>
