@@ -32,6 +32,9 @@ const Create = class {
       name: '${this.modelName}',
       components: {
         ${capitalizedName}Form
+      },
+      created() {
+        this.$emit("showParent", false);
       }
     }
     </script>

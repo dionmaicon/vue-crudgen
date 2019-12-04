@@ -41,6 +41,7 @@ const Edit = class {
       },
       created () {
           this.id = this.$route.params.id;
+          this.$emit("showParent", false);
       }
     }
     </script>

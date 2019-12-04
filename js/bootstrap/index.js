@@ -19,11 +19,11 @@ const Index = class {
       <div class="index container">
 
       <transition name="fade">
-        <router-view>
+        <router-view @showParent="showParent">
         </router-view>
       </transition>
 
-      <div v-if="showIndexPage">
+      <div v-if="showParentPage">
         <div class="breadcrumbs">
           <nav style="display: inline">
             <li><router-link :to="{name: 'home', params:{} }"> Home </router-link></li> /
@@ -107,7 +107,7 @@ const Index = class {
           },
           ${this.modelName}List: [],
           mainList:[],
-          showIndexPage: true,
+          showParentPage: true,
           columns: hide_columns,
           sort: {
             key: null
@@ -163,6 +163,9 @@ const Index = class {
             return 0;
           });
           this.sort.key = param;
+        },
+        showParent(show) {
+          this.showParentPage = show;
         }
       },
       watch: {
@@ -195,8 +198,8 @@ const Index = class {
       beforeRouteUpdate(to, from, next) {
         const toDepth = to.path.split("/").length;
         const fromDepth = from.path.split("/").length;
-        this.showIndexPage = toDepth < fromDepth;
-        if (!this.showIndexPage) {
+        this.showParentPage = toDepth < fromDepth;
+        if (this.showParentPage) {
           this.getResources();
         }
         next();
