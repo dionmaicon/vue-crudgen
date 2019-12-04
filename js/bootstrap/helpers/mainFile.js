@@ -4,19 +4,21 @@ const MainFile = class {
   getTemplate() {
     let template = `
     import Vue from "vue";
-    import axios from "axios";
     import App from "./App.vue";
     import {router, EndPoint } from "./router.js";
     import alert from "./helpers/alert.vue";
     import money from "v-money";
     import VueTheMask from "vue-the-mask";
     import Multiselect from "vue-multiselect";
+    import VueJsonPretty from "vue-json-pretty";
     import "./registerServiceWorker";
 
     import "bootstrap/dist/css/bootstrap.css";
+    import "@fortawesome/fontawesome-free/css/all.css";
     import "vue-multiselect/dist/vue-multiselect.min.css";
 
     Vue.component("multiselect", Multiselect);
+    Vue.component("vue-json-pretty", VueJsonPretty);
 
     Vue.use(VueTheMask);
     Vue.use(money, {
@@ -25,9 +27,6 @@ const MainFile = class {
       prefix: "R$ ",
       precision: 2
     });
-
-    Vue.prototype.$http = axios;
-    Vue.prototype.$endPoint = new EndPoint(process.env.NODE_ENV === "production");
 
     Vue.prototype.$modal = {
       show(options) {
@@ -47,17 +46,7 @@ const MainFile = class {
         });
       }
     };
-
-    Vue.config.productionTip = false;
-
-    export const eventBus = new Vue({
-      methods: {
-        changeModalState() {
-          this.$emit("modalHide");
-        }
-      }
-    });
-
+    
     new Vue({
       router,
       render: h => h(App)

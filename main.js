@@ -98,7 +98,7 @@ const initApp = async () => {
     const init = new Init(config);
     init.generate();
   } catch (e) {
-    console.error(`Models can not to be generate, we have some problem.`);
+    console.error(`Models cannot to be generate, we have some problem.`);
     console.error(e);
   }
 };
@@ -154,9 +154,9 @@ const InstallLocalDependecies = async () => {
 async function main() {
   const program = new commander.Command();
 
-  program.version("TryUs. Software CRUD Generator Vue.js Version: 0.0.4");
+  program.version("TryUS. Software | CRUD Generator Vue.js Version: 0.0.4");
   program
-    .option("-v, --vuetify", "Scaffold Vuetify Templates.")
+    // .option("-v, --vuetify", "Scaffold Vuetify Templates.")
     .option("-b, --bootstrap", "Scaffold Bootstrap Templates (Default).")
     .option("-m, --models <path>", "Generate views for all models in path.")
     .option("-u, --unique <path>", "Generate  for an unique model.")
@@ -201,7 +201,7 @@ async function main() {
   }
 
   const childLintVue = exec(
-    "npx eslint --fix --ext=vue ./src/components/",
+    "npx eslint --fix --ext=vue ./src/",
     (error, stdout, stderr) => {
       // if (error) {
       //   throw error;

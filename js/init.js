@@ -18,8 +18,6 @@ const Init = class {
     // this.createTemplateApp();
     this.createTemplateAlert();
     this.createTemplateMain();
-    // this.createTemplateMenu();
-    // this.createTemplateHome();
   }
 
   async createRoutesStruct() {
@@ -96,7 +94,7 @@ const Init = class {
     const MainFile = require(`./${this.config.frontend}/helpers/mainFile.js`);
     const mainF = new MainFile();
     const mainTemplate = mainF.getTemplate();
-    fs.writeFile(process.cwd() + "/src/main_2.js", mainTemplate, err => {
+    fs.writeFile(process.cwd() + "/src/main.js", mainTemplate, err => {
       if (err) {
         console.error(err);
       } else {
