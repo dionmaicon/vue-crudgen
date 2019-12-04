@@ -5,7 +5,8 @@ const MainFile = class {
     let template = `
     import Vue from "vue";
     import App from "./App.vue";
-    import {router, EndPoint } from "./router.js";
+    import router from "./router";
+    import store from "./store";
     import alert from "./helpers/alert.vue";
     import money from "v-money";
     import VueTheMask from "vue-the-mask";
@@ -46,9 +47,10 @@ const MainFile = class {
         });
       }
     };
-    
+
     new Vue({
       router,
+      store,
       render: h => h(App)
     }).$mount("#app");
 

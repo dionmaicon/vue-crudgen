@@ -124,8 +124,7 @@ const InstallLocalDependecies = async () => {
   try {
     if (config.bootstrap) {
       const child = exec(
-        `npm install --save bootstrap axios v-money vue-the-mask vue-multiselect
-         vuex-persist vue-json-pretty @fortawesome/fontawesome-free`,
+        `npm install --save bootstrap axios v-money vue-the-mask vue-multiselect vuex-persist vue-json-pretty @fortawesome/fontawesome-free`,
         (error, stdout, stderr) => {
           if (error) {
             console.error(error);

@@ -124,7 +124,6 @@ const Form = class {
 
     let script = `
 <script>
-  import { eventBus } from '../../main.js';
   import { get${capitalizedName} } from "@/services/${this.modelName}";
   relationsImport
   import { mapActions, mapGetters } from "vuex";
@@ -144,7 +143,6 @@ const Form = class {
       }
     },
     created() {
-      eventBus.changeModalState();
       this.setInstace();
     },
     methods: {

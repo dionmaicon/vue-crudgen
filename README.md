@@ -10,7 +10,7 @@ Use an API like JSON-SERVER and listen in some port, inform your endPoint in res
 REST endPoint pattern recommended, example:
 
 ```
-endPoint: 'http://localhost:3002/users
+endPoint: 'http://localhost:3002/authors
 ```
 
 Best practices for better RESTful API:
@@ -23,74 +23,63 @@ Result for a model generate for this tool:
 ![vue-crudgen-laptop with hidpi screen](https://user-images.githubusercontent.com/19849921/51761375-05803080-20b4-11e9-9cab-055008397c32.png)
 
 
-Ok Dion (me), but how create my frontend? I explain.
+How to Do!
+
+Firt of all, init Vue-Crudgen structure project pattern.
+
+```
+cd <you-root-project-path>
+vue-crudgen -i
+```
+After run the command just wait some seconds for scaffold and lint.
+Now you need to create models.
 ```
 mkdir models
 cd models
-touch user.js
+touch author.js
 ```
 Files *.js models objects should be named in singular.
 
 ```javascript
-//user.js
+//author.js
 
-//Resource object hold the rest api address
-const resource = {
-  endPoint: 'http://localhost:3002/users'
-}
-
-//Hide properties not are shows in the tables use "hide"
-//Properties suffix with _select, _radio, _file, _checkbox and _textarea are especials
-const model = ( function (){
-  return  {
-    'username': {
-      type: 'text',
-      required: 'true'
-    },
-    'password': {
-      type: 'password',
-      required: true
-    },
-    'name': {
-      type: 'text',
-      required: true
-    },
-    'email':{
-      type: 'email',
-      required: true
-    },
-    'typeDoc_select': {
-      options: [{ text: "Type 1", value: 1}, { text: "Type 2", value: 0}]
-    },
-    'doc': {
-        type: 'text',
-        required : true,
-        placeholder:"###.###.###-##",
-        title:"CPF 999.999.999-99",
-        pattern: "\d{3}\.\d{3}.\d{3}-\d{2}"
-    },
-    'dataNasc': {
-      type: 'date',
-    },
-    'active_radio': {
-      options: [
-        {id:'Active', value: 'Yes'},
-        {id:'Inactive', value: 'No'}
-      ]
-    },
-    'hide': ['username','password', 'dataNasc', 'active',  'doc' ]
+const model = {
+  name: {
+    type: "text",
+    required: true
+  },
+  birth: {
+    type: "date",
+    required: true
+  },
+  active: {
+    type: "radio",
+    options: [{ id: "Active", value: true }, { id: "Inactive", value: false }]
+  },
+  sponsor: {
+    type: "select",
+    options: ["Patron", "Vue-Crudgen"]
   }
-})();
+};
 
-module.exports = {model, resource}
+module.exports = { model };
 
 ```
 After create a model, execute at command line:
 ```
-vue-crudgen -m models/ -c path-to-components/ -a path-to-sources-file/
+vue-crudgen -m ./src/models/
 ```
-Vue crud Generator use eslint to prettier/vue code. Check dependencies.
+IMPORTANT!! Vue crud Generator uses eslint to prettier/vue code. Check dependencies.
 
+```
+//.eslintrc
+...
+'extends': [
+  'plugin:prettier/recommended',
+  'plugin:vue/essential',
+],
+...
+```
 Example:
 ```
 ./
@@ -105,7 +94,10 @@ Example:
     │   └── logo.png
     ├── App.vue
     ├── main.js
-    ├── router.js
+    ├── router
+    |    ├──index.js
+    ├── services
+        ├──service.js
     ├── models
     │   ├── user.js
 
@@ -113,7 +105,7 @@ Example:
 Execute in root of the project:
 
 ```
-vue-crudgen -m src/models/ -a src/
+vue-crudgen -m ./src/models/
 ```
 
 Will be generate the follow:
@@ -130,26 +122,78 @@ Will be generate the follow:
     ├── assets
     │   └── logo.png
     ├── components
-    │   ├── user
-    │   │   ├── userCreate.vue
-    │   │   ├── userEdit.vue
-    │   │   ├── userForm.vue
-    │   │   ├── userIndex.vue
-    │   │   └── userView.vue
-    │   ├── home.vue
-    │   └── menu.vue
+    │   ├── author
+    │   │   ├── AuthorCreate.vue
+    │   │   ├── AuthorEdit.vue
+    │   │   ├── AuthorForm.vue
+    │   │   ├── AuthorIndex.vue
+    │   │   └── AuthorView.vue
     ├── helpers
     │   └── alert.vue
     ├── App.vue
     ├── main.js
-    ├── router.js
+    ├── router
+    |    ├──index.js
+    ├── routes
+    |    ├──author.js
+    |    ├──index.js
+    ├── services
+    |    ├──author.js
+    |    ├──service.js
+    ├── store
+    |    ├──modules
+    |    |  ├──author.js
+    |    |  ├──index.js
+    |    ├──index.js
     ├── models
-    │   ├── user.js
+    │   ├── author.js
     |
 ```
+Others models:
 
+```
+//book.js
 
-Others screenshots
+const model = {
+  title: {
+    type: "text",
+    required: true
+  },
+  ISBN: {
+    type: "number",
+    required: true
+  },
+  authors: {
+    type: "oneToMany",
+    attribute: "name",
+    model: "author",
+  },
+  publishing: {
+    type: "oneToOne",
+    attribute: "name",
+    model: "publishing",
+  },
+  year: {
+    type: "number",
+    required: true
+  },
+  price: {
+    type: "currency"
+  },
+  hidden_fields: ["price", "ISBN"]
+};
 
-![vue-crudgen-create-iphone](https://user-images.githubusercontent.com/19849921/51761373-04e79a00-20b4-11e9-9adc-56a49384338f.png)
-![vue-crud-gen iphone 6_7_8](https://user-images.githubusercontent.com/19849921/51761374-04e79a00-20b4-11e9-91e8-6457bd56c484.png)
+module.exports = { model };
+
+//publishing.js
+
+const model = {
+  name: {
+    type: "text",
+    required: true
+  }
+};
+
+module.exports = { model };
+
+```
