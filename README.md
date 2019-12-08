@@ -1,6 +1,8 @@
 # vue-crudgen
 CRUD (Create, Read, Update and Delete) basic generator for Vue.js
 
+[![Coverage Status](https://coveralls.io/repos/github/dionmaicon/vue-crudgen/badge.svg?branch=master)](https://coveralls.io/github/dionmaicon/vue-crudgen?branch=master)
+
 The focus this package is front-end with vue..
 
 Some tips:
