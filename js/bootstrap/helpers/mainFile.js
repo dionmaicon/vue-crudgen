@@ -10,7 +10,7 @@ const MainFile = class {
     import alert from "./helpers/alert.vue";
     import money from "v-money";
     import VueTheMask from "vue-the-mask";
-    import Multiselect from "vue-multiselect";
+    import Multiselects from "vue-multiselect";
     import VueJsonPretty from "vue-json-pretty";
     import "./registerServiceWorker";
 
