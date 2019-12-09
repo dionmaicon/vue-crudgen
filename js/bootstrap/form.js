@@ -47,6 +47,7 @@ const Form = class {
         } else if (this.model[property].type == "textarea") {
           templateStruct += `\t<textarea id="${property}" style="width: 100%" v-model="${this.modelName}.${property}" rows="10">You text here...</textarea>\n\n`;
         } else if (this.model[property].type == "radio") {
+            templateStruct += "<br />";
           for (var option of this.model[property].options) {
             templateStruct += `\t<input type="radio" id="${option.id}" value="${option.value}" v-model="${this.modelName}.${property}">\n`;
             templateStruct += `\t<label for="${option.id}">${option.value}</label><br>\n\n`;
