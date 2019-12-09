@@ -1,6 +1,6 @@
 {
   "name": "vue-crudgen",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "TryUs. Software CRUD (Create, Read, Update and Delete) basic generator for Vue.js",
   "author": "Dion Maicon E. Duarte <dionmaicon@outlook.com>",
   "scripts": {

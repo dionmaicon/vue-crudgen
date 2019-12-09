@@ -153,7 +153,7 @@ const InstallLocalDependecies = async () => {
 async function main() {
   const program = new commander.Command();
 
-  program.version("TryUS. Software | CRUD Generator Vue.js Version: 0.0.4");
+  program.version("Dion Maicon | CRUD Generator Vue.js Version: 1.0.4");
   program
     // .option("-v, --vuetify", "Scaffold Vuetify Templates.")
     .option("-b, --bootstrap", "Scaffold Bootstrap Templates (Default).")
