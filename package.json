@@ -6,7 +6,15 @@
   "scripts": {
     "dev": "npm run serve",
     "test": "jest",
+    "lint-staged": "lint-staged",
     "coveralls": "cat ./coverage/lcov.info | node node_modules/.bin/coveralls"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add",
+      "jest --bail --findRelatedTests"
+    ]
   },
   "bin": {
     "vue-crudgen": "./main.js"
@@ -24,6 +32,7 @@
     "eslint-plugin-vue": "^6.0.1",
     "faker": "^4.1.0",
     "jest": "^24.9.0",
+    "lint-staged": "^9.5.0",
     "prettier": "^1.19.1",
     "prettier-eslint": "^9.0.0"
   },

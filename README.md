@@ -5,16 +5,6 @@ CRUD (Create, Read, Update and Delete) basic generator for Vue.js
 
 The focus this package is front-end with vue..
 
-Some tips:
-
-Use an API like JSON-SERVER and listen in some port, inform your endPoint in resource const object.
-
-REST endPoint pattern recommended, example:
-
-```
-endPoint: 'http://localhost:3002/authors
-```
-
 Best practices for better RESTful API:
 
 ![image](https://user-images.githubusercontent.com/19849921/51780016-45660880-20f2-11e9-9d59-dec28b1bc5aa.png)
@@ -24,15 +14,22 @@ Result for a model generate for this tool:
 
 ![vue-crudgen-laptop with hidpi screen](https://user-images.githubusercontent.com/19849921/51761375-05803080-20b4-11e9-9cab-055008397c32.png)
 
-Install
+
+Install Vue CLI and Vue-Crudgen.
 ```
+npm install -g @vue/cli
 npm install -g vue-crudgen
 
 ```
 
-How to Do!
+How to do?
 
-Firt of all, init Vue-Crudgen structure project pattern.
+First of all, You need create a Vue-project and set up your structure of files. My default configurations is babel, pwa, router, vuex, eslint, unit-jest.
+```
+vue create <your-project>
+
+```
+Now init Vue-Crudgen structure project pattern.
 
 ```
 cd <you-root-project-path>
@@ -49,6 +46,10 @@ Files *.js models objects should be named in singular.
 
 ```javascript
 //author.js
+
+const resource = {
+  endPoint: "authors"
+};
 
 const model = {
   name: {
@@ -69,7 +70,7 @@ const model = {
   }
 };
 
-module.exports = { model };
+module.exports = { model, resource };
 
 ```
 After create a model, execute at command line:
