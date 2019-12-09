@@ -67,7 +67,7 @@ const model = {
   },
   sponsor: {
     type: "select",
-    options: ["Patron", "Vue-Crudgen"]
+    options: ["Patreon", "Legacy"]
   }
 };
 
