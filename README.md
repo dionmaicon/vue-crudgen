@@ -2,6 +2,7 @@
 CRUD (Create, Read, Update and Delete) basic generator for Vue.js
 
 [![Coverage Status](https://coveralls.io/repos/github/dionmaicon/vue-crudgen/badge.svg?branch=master)](https://coveralls.io/github/dionmaicon/vue-crudgen?branch=master)
+[![Build Status](https://travis-ci.org/dionmaicon/vue-crudgen.svg?branch=master)](https://travis-ci.org/dionmaicon/vue-crudgen)
 
 The focus this package is front-end with vue..
 
@@ -162,6 +163,10 @@ Others models:
 ```
 //book.js
 
+const resource = {
+  endPoint: "books"
+};
+
 const model = {
   title: {
     type: "text",
@@ -174,12 +179,12 @@ const model = {
   authors: {
     type: "oneToMany",
     attribute: "name",
-    model: "author",
+    model: "author"
   },
   publishing: {
     type: "oneToOne",
     attribute: "name",
-    model: "publishing",
+    model: "publishing"
   },
   year: {
     type: "number",
@@ -191,9 +196,14 @@ const model = {
   hidden_fields: ["price", "ISBN"]
 };
 
-module.exports = { model };
+module.exports = { model, resource };
+
 
 //publishing.js
+
+const resource = {
+  endPoint: "publishings"
+};
 
 const model = {
   name: {
@@ -202,6 +212,6 @@ const model = {
   }
 };
 
-module.exports = { model };
+module.exports = { model, resource };
 
 ```
