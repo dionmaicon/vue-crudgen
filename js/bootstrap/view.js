@@ -1,6 +1,5 @@
 /* eslint-disable */
 const capitalize = require("../libs/capitalize");
-const pluralize = require("pluralize");
 
 const View = class {
   constructor(name, model, resource) {
@@ -11,10 +10,8 @@ const View = class {
 
   getTemplate() {
     let capitalizedName = capitalize(this.modelName);
-    let pluralizedAndCapitalizedName = pluralize(capitalizedName);
 
-    let template =
-    `<template>
+    let template = `<template>
         <div class="view">
           <div class="breadcrumbs">
             <nav style="display: inline">
@@ -122,7 +119,10 @@ const View = class {
       if (this.model.hasOwnProperty(property)) {
         if (property.includes("hidden_fields")) continue;
 
-        if (this.model[property].type === "oneToMany" || this.model[property].type === "oneToOne") {
+        if (
+          this.model[property].type === "oneToMany" ||
+          this.model[property].type === "oneToOne"
+        ) {
           viewStruct += `
           <li v-if="${this.modelName}.${property}" class="list-group-item">
             <span class="liTitle">
@@ -132,7 +132,7 @@ const View = class {
             >
             </vue-json-pretty>
           </li> \n`;
-             continue;
+          continue;
         }
 
         viewStruct += `

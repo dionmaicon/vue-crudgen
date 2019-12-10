@@ -11,7 +11,6 @@ const Form = class {
 
   getTemplate() {
     let capitalizedName = capitalize(this.modelName);
-    let pluralizedAndCapitalizedName = pluralize(capitalizedName);
 
     let template =
     `<template>
@@ -27,7 +26,7 @@ const Form = class {
 
     let countFiles = 0;
     //Template Struct
-    for (var property in this.model) {
+    for (let property in this.model) {
       if (property.includes("hidden_fields")) continue; //if property includes 'hide'in your text  this loop skip once
 
       if (this.model.hasOwnProperty(property)) {
@@ -48,12 +47,12 @@ const Form = class {
           templateStruct += `\t<textarea id="${property}" style="width: 100%" v-model="${this.modelName}.${property}" rows="10">You text here...</textarea>\n\n`;
         } else if (this.model[property].type == "radio") {
             templateStruct += "<br />";
-          for (var option of this.model[property].options) {
+          for (let option of this.model[property].options) {
             templateStruct += `\t<input type="radio" id="${option.id}" value="${option.value}" v-model="${this.modelName}.${property}">\n`;
             templateStruct += `\t<label for="${option.id}">${option.value}</label><br>\n\n`;
           }
         } else if (this.model[property].type == "checkbox") {
-          for (var option of this.model[property].options) {
+          for (let option of this.model[property].options) {
             templateStruct += `\t<input type="checkbox" id="${option.id}" value="${option.value}" v-model="${this.modelName}.${property}">\n`;
             templateStruct += `\t<label for="${option.id}">${option.value}</label><br>\n\n`;
           }
@@ -112,7 +111,7 @@ const Form = class {
               \n`;
         } else {
           templateStruct += `\t<input id="${property}" class="form-control" `;
-          for (var htmlProp in this.model[property]) {
+          for (let htmlProp in this.model[property]) {
             if (this.model[property].hasOwnProperty(htmlProp)) {
               templateStruct += ` ${htmlProp}="${this.model[property][htmlProp]}" `;
             }
@@ -200,7 +199,7 @@ const Form = class {
           get${capitalizedName}(this.id)
             .then(response => {
               let instance = response.data;
-              for (var property in instance) {
+              for (let property in instance) {
                 if (instance.hasOwnProperty(property) && this.${this.modelName}.hasOwnProperty(property)) {
                   this.${this.modelName}[property] = instance[property];
                 }
@@ -237,7 +236,7 @@ const Form = class {
     let dataImport = ``;
     let dataComponent = ``;
 
-    for (var property in this.model) {
+    for (let property in this.model) {
       if (this.model.hasOwnProperty(property)) {
         if (property.includes("hidden_fields")) continue; //If contains word hide continue loop for next iteration
 
@@ -258,7 +257,7 @@ const Form = class {
     let dataScript = ``;
     let relationsScript = ``;
 
-    for (var property in this.model) {
+    for (let property in this.model) {
       if (this.model.hasOwnProperty(property)) {
         if (property.includes("hidden_fields")) continue;
 
@@ -292,7 +291,7 @@ const Form = class {
     let relationsFetchScript = ``;
     let relationsImport = ``;
 
-    for (var property in this.model) {
+    for (let property in this.model) {
       if (this.model.hasOwnProperty(property)) {
         if (property.includes("hidden_fields")) continue;
 
@@ -318,7 +317,7 @@ const Form = class {
     let methodsScript = ``;
 
     if (countFiles > 0) {
-      for (var property in this.model) {
+      for (let property in this.model) {
         if (this.model.hasOwnProperty(property)) {
           if (this.model[property].type == "file") {
             methodsScript += `

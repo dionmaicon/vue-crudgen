@@ -123,7 +123,7 @@ const createTemplates = async (name, model, resource) => {
 const InstallLocalDependecies = async () => {
   try {
     if (config.bootstrap) {
-      const child = exec(
+      exec(
         `npm install --save bootstrap axios v-money vue-the-mask vue-multiselect vuex-persist vue-json-pretty @fortawesome/fontawesome-free`,
         (error, stdout, stderr) => {
           if (error) {
@@ -134,7 +134,7 @@ const InstallLocalDependecies = async () => {
       );
     } else {
       config.frontend = "vuetify";
-      const child = exec(
+      exec(
         "npm install --save vuetify axios v-money vue-the-mask vue-multiselect vuex-persist vue-json-pretty",
         (error, stdout, stderr) => {
           if (error) {
@@ -192,34 +192,20 @@ async function main() {
   }
 
   if (program.models) {
-    let models = await initModels();
+    await initModels();
   }
 
   if (program.unique) {
     await initModel();
   }
 
-  const childLintVue = exec(
-    "npx eslint --fix --ext=vue ./src/",
-    (error, stdout, stderr) => {
-      // if (error) {
-      //   throw error;
-      // }
-      // console.log(stdout);
-      console.log(stdout);
-    }
-  );
+  exec("npx eslint --fix --ext=vue ./src/", (error, stdout, stderr) => {
+    console.log(stdout);
+  });
 
-  const childLintJs = exec(
-    "npx eslint --fix --ext=js ./src/",
-    (error, stdout, stderr) => {
-      // if (error) {
-      //   throw error;
-      // }
-      // console.log(stdout);
-      console.log(stdout);
-    }
-  );
+  exec("npx eslint --fix --ext=js ./src/", (error, stdout, stderr) => {
+    console.log(stdout);
+  });
 }
 
 main();
