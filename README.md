@@ -3,6 +3,10 @@ CRUD (Create, Read, Update and Delete) basic generator for Vue.js
 
 [![Coverage Status](https://coveralls.io/repos/github/dionmaicon/vue-crudgen/badge.svg?branch=master)](https://coveralls.io/github/dionmaicon/vue-crudgen?branch=master)
 [![Build Status](https://travis-ci.org/dionmaicon/vue-crudgen.svg?branch=master)](https://travis-ci.org/dionmaicon/vue-crudgen)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=dionmaicon_vue-crudgen&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=dionmaicon_vue-crudgen)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=dionmaicon_vue-crudgen&metric=ncloc)](https://sonarcloud.io/dashboard?id=dionmaicon_vue-crudgen)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=dionmaicon_vue-crudgen&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=dionmaicon_vue-crudgen)
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=dionmaicon_vue-crudgen)](https://sonarcloud.io/dashboard?id=dionmaicon_vue-crudgen)
 
 The focus this package is front-end with vue..
 
