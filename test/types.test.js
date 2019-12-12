@@ -80,6 +80,61 @@ test("Check if model is valid", () => {
   });
 });
 
+test("Check if model is invalid (CURRENCY)", () => {
+  model.supply = {
+    type: Types.CURRENCY
+  };
+
+  let response = Types.modelIsValid(model);
+
+  expect(response.message).toMatch("Model is valid.");
+  expect(response.success).toBeTruthy();
+});
+
+test("Check if model is invalid (TEXTAREA)", () => {
+  model.supply = {
+    type: Types.TEXTAREA
+  };
+
+  let response = Types.modelIsValid(model);
+
+  expect(response.message).toMatch("Model is valid.");
+  expect(response.success).toBeTruthy();
+});
+
+test("Check if model is invalid (HTML)", () => {
+  model.supply = {
+    type: Types.HTML
+  };
+
+  let response = Types.modelIsValid(model);
+
+  expect(response.message).toMatch("Model is valid.");
+  expect(response.success).toBeTruthy();
+});
+
+test("Check if model is invalid (FILE)", () => {
+  model.supply = {
+    type: Types.FILE
+  };
+
+  let response = Types.modelIsValid(model);
+
+  expect(response.message).toMatch("Model is valid.");
+  expect(response.success).toBeTruthy();
+});
+
+test("Check if model is invalid ()", () => {
+  model.supply = {
+    type: Types.CURRENCY
+  };
+
+  let response = Types.modelIsValid(model);
+
+  expect(response.message).toMatch("Model is valid.");
+  expect(response.success).toBeTruthy();
+});
+
 test("Check if model is invalid (ONE_TO_ONE)", () => {
   model.supply = {
     type: Types.ONE_TO_ONE

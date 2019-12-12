@@ -12,8 +12,7 @@ const Form = class {
   getTemplate() {
     let capitalizedName = capitalize(this.modelName);
 
-    let template =
-    `<template>
+    let template = `<template>
       <div id="${this.modelName}Form" class="form">
        <form @submit.prevent="handleSubmit">
         templateStructString
@@ -27,10 +26,9 @@ const Form = class {
     let countFiles = 0;
     //Template Struct
     for (let property in this.model) {
-      if (property.includes("hidden_fields")) continue; //if property includes 'hide'in your text  this loop skip once
+      if (property.includes("hidden_fields")) continue;
 
       if (this.model.hasOwnProperty(property)) {
-        // types: number, text, select, currency, radio, checkbox, oneToOne, object, html
         templateStruct += `\t<div class="form-group">\n\t\t<label for="${property}">${property}</label>\n`;
 
         if (this.model[property].type == "select") {
@@ -46,7 +44,7 @@ const Form = class {
         } else if (this.model[property].type == "textarea") {
           templateStruct += `\t<textarea id="${property}" style="width: 100%" v-model="${this.modelName}.${property}" rows="10">You text here...</textarea>\n\n`;
         } else if (this.model[property].type == "radio") {
-            templateStruct += "<br />";
+          templateStruct += "<br />";
           for (let option of this.model[property].options) {
             templateStruct += `\t<input type="radio" id="${option.id}" value="${option.value}" v-model="${this.modelName}.${property}">\n`;
             templateStruct += `\t<label for="${option.id}">${option.value}</label><br>\n\n`;
@@ -106,9 +104,6 @@ const Form = class {
                 class="form-control"
                 v-model.lazy="${this.modelName}.${property}"
               />\n`;
-        } else if (this.model[property].type == "object") {
-          templateStruct += `\t<input id="${property}" class="form-control" v-model="${this.modelName}.${property}.${this.model[property].attribute}">
-              \n`;
         } else {
           templateStruct += `\t<input id="${property}" class="form-control" `;
           for (let htmlProp in this.model[property]) {
@@ -266,8 +261,6 @@ const Form = class {
             this.model[property].options
           )},\n`;
           dataScript += `${property}: '',\n`;
-        } else if (this.model[property].type == "object") {
-          dataScript += `${property}: {},\n`;
         } else if (this.model[property].type == "checkbox") {
           dataScript += `${property}: [],\n`;
         } else if (this.model[property].type == "oneToOne") {
@@ -300,7 +293,9 @@ const Form = class {
           this.model[property].type == "oneToMany"
         ) {
           let capitalizedRelationName = capitalize(this.model[property].model);
-          let pluralizedAndCapitalizedRelationName = pluralize(capitalizedRelationName);
+          let pluralizedAndCapitalizedRelationName = pluralize(
+            capitalizedRelationName
+          );
           relationsImport += `
               import { getAll${pluralizedAndCapitalizedRelationName} } from "@/services/${this.model[property].model}";
             `;

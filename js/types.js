@@ -9,7 +9,6 @@ const HTML = "html";
 const RADIO = "radio";
 const CHECKBOX = "checkbox";
 const FILE = "file";
-const OBJECT = "object";
 
 const HTML5_TYPES = [
   "color",
@@ -79,10 +78,6 @@ const Types = class {
     return FILE;
   }
 
-  static get OBJECT() {
-    return OBJECT;
-  }
-
   static get validTypes() {
     return HTML5_TYPES.concat([
       ONE_TO_ONE,
@@ -95,8 +90,7 @@ const Types = class {
       HTML,
       RADIO,
       CHECKBOX,
-      FILE,
-      OBJECT
+      FILE
     ]);
   }
 
