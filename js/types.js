@@ -106,33 +106,32 @@ const Types = class {
     };
 
     for (let prop in model) {
-      if (model.hasOwnProperty(prop)) {
-        let object = model[prop];
-        switch (model[prop].type) {
-          case Types.ONE_TO_ONE:
-          case Types.ONE_TO_MANY:
-            if (!object.attribute) {
-              response.message += `Model type: ${prop} needs attribute property.\n`;
-              response.success = false;
-            }
-            if (!object.model) {
-              response.message += `Model type: ${prop} needs model property.\n`;
-              response.success = false;
-            }
-            break;
-          case Types.RADIO:
-          case Types.CHECKBOX:
-          case Types.SELECT:
-            if (!object.options) {
-              response.message += `Model type: ${prop} needs options property.\n`;
-              response.success = false;
-            }
-            break;
-        }
-        if (!this.isValid(model[prop].type)) {
-          response.message += `Model type: ${prop} is invalid.\n`;
-          response.success = false;
-        }
+      if (!model.hasOwnProperty(prop)) continue;
+      let object = model[prop];
+      switch (model[prop].type) {
+        case Types.ONE_TO_ONE:
+        case Types.ONE_TO_MANY:
+          if (!object.attribute) {
+            response.message += `Model type: ${prop} needs attribute property.\n`;
+            response.success = false;
+          }
+          if (!object.model) {
+            response.message += `Model type: ${prop} needs model property.\n`;
+            response.success = false;
+          }
+          break;
+        case Types.RADIO:
+        case Types.CHECKBOX:
+        case Types.SELECT:
+          if (!object.options) {
+            response.message += `Model type: ${prop} needs options property.\n`;
+            response.success = false;
+          }
+          break;
+      }
+      if (!this.isValid(model[prop].type)) {
+        response.message += `Model type: ${prop} is invalid.\n`;
+        response.success = false;
       }
     }
 
