@@ -53,7 +53,7 @@ test("Check if types are valid", () => {
 });
 
 test("Check if Types Models is invalid", () => {
-  let model = {
+  let person = {
     sponsor: {
       type: "selects",
       options: ["Patron", "Vue-Crudgen"]
@@ -62,9 +62,9 @@ test("Check if Types Models is invalid", () => {
 
   let count;
 
-  for (let prop in model) {
-    if (model.hasOwnProperty(prop)) {
-      if (Types.isValid(model[prop].type)) {
+  for (let prop in person) {
+    if (person.hasOwnProperty(prop)) {
+      if (Types.isValid(person[prop].type)) {
         count++;
       }
     }
