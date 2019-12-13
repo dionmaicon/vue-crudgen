@@ -53,7 +53,7 @@ test("Check if types are valid", () => {
 });
 
 test("Check if Types Models is invalid", () => {
-  let model = {
+  let person = {
     sponsor: {
       type: "selects",
       options: ["Patron", "Vue-Crudgen"]
@@ -62,9 +62,9 @@ test("Check if Types Models is invalid", () => {
 
   let count;
 
-  for (let prop in model) {
-    if (model.hasOwnProperty(prop)) {
-      if (Types.isValid(model[prop].type)) {
+  for (let prop in person) {
+    if (person.hasOwnProperty(prop)) {
+      if (Types.isValid(person[prop].type)) {
         count++;
       }
     }
@@ -217,6 +217,16 @@ test("Check if model is invalid (INVALID TYPE)", () => {
   let response = Types.modelIsValid(model);
 
   expect(response.message).toMatch("Model type: supply is invalid.");
+
+  expect(response.success).toBeFalsy();
+});
+
+test("Check if model is invalid (Model Inherited)", () => {
+  const obj = Object.create({ name: "stuart" });
+
+  let response = Types.modelIsValid(obj);
+
+  expect(response.message).toMatch("Model invalid.");
 
   expect(response.success).toBeFalsy();
 });

@@ -106,7 +106,12 @@ const Types = class {
     };
 
     for (let prop in model) {
-      if (!model.hasOwnProperty(prop)) continue;
+      if (!model.hasOwnProperty(prop)) {
+        response.message = "Model invalid.";
+        response.success = false;
+        continue;
+      }
+
       let object = model[prop];
       switch (model[prop].type) {
         case Types.ONE_TO_ONE:
