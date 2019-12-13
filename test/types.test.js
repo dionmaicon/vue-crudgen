@@ -220,3 +220,13 @@ test("Check if model is invalid (INVALID TYPE)", () => {
 
   expect(response.success).toBeFalsy();
 });
+
+test("Check if model is invalid (Model Inherited)", () => {
+  const obj = Object.create({ name: "stuart" });
+
+  let response = Types.modelIsValid(obj);
+
+  expect(response.message).toMatch("Model invalid.");
+
+  expect(response.success).toBeFalsy();
+});
