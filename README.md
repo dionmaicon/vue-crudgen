@@ -197,7 +197,10 @@ const model = {
   price: {
     type: "currency"
   },
-  hidden_fields: ["price", "ISBN"]
+  fields: {
+    type: "hiddenFields",
+    options: ["price", "ISBN"]
+  }
 };
 
 module.exports = { model, resource };

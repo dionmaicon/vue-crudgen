@@ -6,6 +6,7 @@ const { exec } = require("child_process");
 
 const Crud = require("./js/crud.js");
 const Init = require("./js/init.js");
+const Types = require("./js/types.js");
 
 const config = {
   pathRoutes: path.join(process.cwd(), "src/routes"),
@@ -55,7 +56,12 @@ const createFiles = (name, file) => {
       console.error(`Template model "${name}" has sintax error.`);
       process.exit(-1);
     }
-    createTemplates(name, model, resource);
+    let valid = Types.modelIsValid(model);
+    if (valid.success == true) {
+      createTemplates(name, model, resource);
+    } else {
+      console.log(valid.message);
+    }
   });
 };
 

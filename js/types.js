@@ -9,6 +9,7 @@ const HTML = "html";
 const RADIO = "radio";
 const CHECKBOX = "checkbox";
 const FILE = "file";
+const HIDDEN_FIELDS = "hiddenFields";
 
 const HTML5_TYPES = [
   "color",
@@ -78,6 +79,10 @@ const Types = class {
     return FILE;
   }
 
+  static get HIDDEN_FIELDS() {
+    return HIDDEN_FIELDS;
+  }
+
   static get validTypes() {
     return HTML5_TYPES.concat([
       ONE_TO_ONE,
@@ -90,7 +95,8 @@ const Types = class {
       HTML,
       RADIO,
       CHECKBOX,
-      FILE
+      FILE,
+      HIDDEN_FIELDS
     ]);
   }
 
@@ -128,6 +134,7 @@ const Types = class {
         case Types.RADIO:
         case Types.CHECKBOX:
         case Types.SELECT:
+        case Types.HIDDEN_FIELDS:
           if (!object.options) {
             response.message += `Model type: ${prop} needs options property.\n`;
             response.success = false;

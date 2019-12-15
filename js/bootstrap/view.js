@@ -1,5 +1,6 @@
 /* eslint-disable */
 const capitalize = require("../libs/capitalize");
+const Types = require("../types");
 
 const View = class {
   constructor(name, model, resource) {
@@ -117,11 +118,11 @@ const View = class {
     let viewStruct = "";
     for (var property in this.model) {
       if (this.model.hasOwnProperty(property)) {
-        if (property.includes("hidden_fields")) continue;
+        if (this.model[property].type === Types.HIDDEN_FIELDS) continue;
 
         if (
-          this.model[property].type === "oneToMany" ||
-          this.model[property].type === "oneToOne"
+          this.model[property].type === Types.ONE_TO_MANY ||
+          this.model[property].type === Types.ONE_TO_ONE
         ) {
           viewStruct += `
           <li v-if="${this.modelName}.${property}" class="list-group-item">
