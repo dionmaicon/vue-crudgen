@@ -1,5 +1,6 @@
 const capitalize = require("../libs/capitalize");
 const pluralize = require("pluralize");
+const Types = require("../types");
 
 const Index = class {
   constructor(name, model, resource) {
@@ -108,7 +109,6 @@ const Index = class {
           ${this.modelName}List: [],
           mainList:[],
           showParentPage: true,
-          columns: hide_columns,
           sort: {
             key: null
           },
@@ -289,34 +289,29 @@ const Index = class {
 
     `;
 
-    let hide = this.model["hidden_fields"];
+    let hiddenFields = [];
+    for (let property in this.model) {
+      if (!this.model.hasOwnProperty(property)) continue;
 
-    if (hide != null) {
-      templateHTMLStart = templateHTMLStart.replace(
-        "hide_columns",
-        JSON.stringify(this.model["hidden_fields"])
-      );
-    } else {
-      templateHTMLStart = templateHTMLStart.replace("hide_columns", "[]");
+      if (this.model[property].type == Types.HIDDEN_FIELDS) {
+        hiddenFields = this.model[property].options;
+        break;
+      }
     }
 
-    for (var property in this.model) {
-      if (this.model.hasOwnProperty(property)) {
-        if (property.includes("hidden_fields")) continue;
+    for (let property in this.model) {
+      if (!this.model.hasOwnProperty(property)) continue;
 
-        if (hide) {
-          if (hide.includes(property)) continue;
-        }
+      if (
+        this.model[property].type === Types.ONE_TO_ONE ||
+        this.model[property].type === Types.ONE_TO_MANY ||
+        this.model[property].type === Types.HIDDEN_FIELDS ||
+        hiddenFields.includes(property)
+      )
+        continue;
 
-        if (
-          this.model[property].type === "oneToMany" ||
-          this.model[property].type === "oneToOne"
-        )
-          continue;
-
-        templateStrucTableHead += `<th @click="sortBy('${property}')"> ${property} <i style="float: right" class="fa fa-sort"> </i></th>\n`;
-        templateStrucTableBody += `<td>{{${this.modelName}.${property}}}</td>\n`;
-      }
+      templateStrucTableHead += `<th @click="sortBy('${property}')"> ${property} <i style="float: right" class="fa fa-sort"> </i></th>\n`;
+      templateStrucTableBody += `<td>{{${this.modelName}.${property}}}</td>\n`;
     }
 
     templateStrucTableBody += `

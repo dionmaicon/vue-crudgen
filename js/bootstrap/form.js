@@ -1,6 +1,7 @@
 /* eslint-disable */
 const capitalize = require("../libs/capitalize");
 const pluralize = require("pluralize");
+const Types = require("../types");
 
 const Form = class {
   constructor(name, model, resource) {
@@ -26,12 +27,15 @@ const Form = class {
     let countFiles = 0;
     //Template Struct
     for (let property in this.model) {
-      if (property.includes("hidden_fields")) continue;
+
 
       if (this.model.hasOwnProperty(property)) {
+
+        if (this.model[property].type == Types.HIDDEN_FIELDS) continue;
+
         templateStruct += `\t<div class="form-group">\n\t\t<label for="${property}">${property}</label>\n`;
 
-        if (this.model[property].type == "select") {
+        if (this.model[property].type == Types.SELECT) {
           templateStruct += `
           <multiselect
             v-model="${this.modelName}.${property}"
@@ -41,7 +45,7 @@ const Form = class {
             :show-labels="false"
             placeholder="Pick a value"
             />\n`;
-        } else if (this.model[property].type == "textarea") {
+        } else if (this.model[property].type == Types.TEXTAREA) {
           templateStruct += `\t<textarea id="${property}" style="width: 100%" v-model="${this.modelName}.${property}" rows="10">You text here...</textarea>\n\n`;
         } else if (this.model[property].type == "radio") {
           templateStruct += "<br />";
@@ -49,20 +53,20 @@ const Form = class {
             templateStruct += `\t<input type="radio" id="${option.id}" value="${option.value}" v-model="${this.modelName}.${property}">\n`;
             templateStruct += `\t<label for="${option.id}">${option.value}</label><br>\n\n`;
           }
-        } else if (this.model[property].type == "checkbox") {
+        } else if (this.model[property].type == Types.CHECKBOX) {
           for (let option of this.model[property].options) {
             templateStruct += `\t<input type="checkbox" id="${option.id}" value="${option.value}" v-model="${this.modelName}.${property}">\n`;
             templateStruct += `\t<label for="${option.id}">${option.value}</label><br>\n\n`;
           }
-        } else if (this.model[property].type == "file") {
+        } else if (this.model[property].type == Types.FILE) {
           templateStruct += `\t<input type="file" id="${property}"  v-on:change="${property}OnFileChange">\n`;
           countFiles++;
         } else if (
-          this.model[property].type == "oneToOne" ||
-          this.model[property].type == "oneToMany"
+          this.model[property].type == Types.ONE_TO_ONE ||
+          this.model[property].type == Types.ONE_TO_MANY
         ) {
           templateStruct += `\t`;
-          if (this.model[property].type == "oneToOne") {
+          if (this.model[property].type == Types.ONE_TO_ONE) {
             templateStruct += `
                 <multiselect
                   v-model="${this.modelName}.${property}"
@@ -89,7 +93,7 @@ const Form = class {
                   >
                 </multiselect>\n`;
           }
-        } else if (this.model[property].type == "html") {
+        } else if (this.model[property].type == Types.HTML) {
           templateStruct += `\t
               <quill-editor
                 v-model="${this.modelName}.${property}"
@@ -97,7 +101,7 @@ const Form = class {
                 :options="{}"
               />
               \n`;
-        } else if (this.model[property].type == "currency") {
+        } else if (this.model[property].type == Types.CURRENCY) {
           templateStruct += `\t
               <money
                 id="value"
@@ -233,9 +237,10 @@ const Form = class {
 
     for (let property in this.model) {
       if (this.model.hasOwnProperty(property)) {
-        if (property.includes("hidden_fields")) continue; //If contains word hide continue loop for next iteration
 
-        if (this.model[property].type == "html") {
+        if (this.model[property].type == Types.HIDDEN_FIELDS) continue;
+
+        if (this.model[property].type == Types.HTML) {
           if (dataImport == "") {
             dataImport += `
             import "quill/dist/quill.core.css";
@@ -254,25 +259,26 @@ const Form = class {
 
     for (let property in this.model) {
       if (this.model.hasOwnProperty(property)) {
-        if (property.includes("hidden_fields")) continue;
 
-        if (this.model[property].type == "select") {
+        if (this.model[property].type == Types.HIDDEN_FIELDS) continue;
+
+        if (this.model[property].type == Types.SELECT) {
           relationsScript += `${property}: ${JSON.stringify(
             this.model[property].options
           )},\n`;
           dataScript += `${property}: '',\n`;
-        } else if (this.model[property].type == "checkbox") {
+        } else if (this.model[property].type == Types.CHECKBOX) {
           dataScript += `${property}: [],\n`;
-        } else if (this.model[property].type == "oneToOne") {
+        } else if (this.model[property].type == Types.ONE_TO_ONE) {
           relationsScript += `${property}: [],\n`;
           dataScript += `${property}: {},\n`;
-        } else if (this.model[property].type == "oneToMany") {
+        } else if (this.model[property].type == Types.ONE_TO_MANY) {
           relationsScript += `${property}: [],\n`;
           dataScript += `${property}: [],\n`;
         } else if (
-          this.model[property].type == "radio" ||
-          this.model[property].type == "textarea" ||
-          this.model[property].type == "file"
+          this.model[property].type == Types.RADIO ||
+          this.model[property].type == Types.TEXTAREA ||
+          this.model[property].type == Types.FILE
         ) {
           dataScript += `${property}: '',\n`;
         } else {
@@ -286,11 +292,12 @@ const Form = class {
 
     for (let property in this.model) {
       if (this.model.hasOwnProperty(property)) {
-        if (property.includes("hidden_fields")) continue;
+
+        if (this.model[property].type == Types.HIDDEN_FIELDS) continue;
 
         if (
-          this.model[property].type == "oneToOne" ||
-          this.model[property].type == "oneToMany"
+          this.model[property].type == Types.ONE_TO_ONE ||
+          this.model[property].type == Types.ONE_TO_MANY
         ) {
           let capitalizedRelationName = capitalize(this.model[property].model);
           let pluralizedAndCapitalizedRelationName = pluralize(
@@ -314,7 +321,7 @@ const Form = class {
     if (countFiles > 0) {
       for (let property in this.model) {
         if (this.model.hasOwnProperty(property)) {
-          if (this.model[property].type == "file") {
+          if (this.model[property].type == Types.FILE) {
             methodsScript += `
               ${property}OnFileChange(e){
                 let files = e.target.files || e.dataTransfer.files;

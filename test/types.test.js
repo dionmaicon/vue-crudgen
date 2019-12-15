@@ -36,6 +36,10 @@ const model = {
   sponsor: {
     type: Types.SELECT,
     options: ["Patron", "Vue-Crudgen"]
+  },
+  fields: {
+    type: Types.HIDDEN_FIELDS,
+    options: ["birth", "price"]
   }
 };
 
@@ -49,7 +53,7 @@ test("Check if types are valid", () => {
       }
     }
   }
-  expect(count).toBe(8);
+  expect(count).toBe(9);
 });
 
 test("Check if Types Models is invalid", () => {
