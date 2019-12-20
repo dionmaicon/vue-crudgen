@@ -55,7 +55,6 @@ const View = class {
     </template>
 
     <script>
-    import {eventBus} from '../../main.js';
     import { get${capitalizedName} } from "@/services/${this.modelName}";
 
     export default {

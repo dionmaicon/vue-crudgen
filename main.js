@@ -150,6 +150,15 @@ const InstallLocalDependecies = async () => {
         }
       );
     }
+    exec(
+      `npm install --save-dev eslint-plugin-prettier eslint-config-prettier`,
+      (error, stdout, stderr) => {
+        if (error) {
+          console.error(error);
+        }
+        console.log(stdout);
+      }
+    );
   } catch (e) {
     console.error(`Models cannot to be generate, we have problems here.`);
     console.error(e);

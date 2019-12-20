@@ -95,7 +95,6 @@ const Index = class {
   </template>
 
     <script>
-    import { eventBus } from '../../main.js'
     import { mapActions, mapGetters } from "vuex";
 
     export default {
