@@ -126,7 +126,7 @@ const Index = class {
           this.$router.push({ name: "${this.modelName}Edit", params: { id: id }})
         },
         async remove(id){
-          let option = await this.$modal.show({title: "Danger", message: "Do you sure that want delete this ${this.modelName}? This operation is irreversible!" , alert : "danger"});
+          let option = await this.$modal.show({title: "Danger", message: "Do you want delete this ${this.modelName}?" , alert : "danger"});
           if(option){
             this.delete${capitalizedName}(id)
               .then( response => {
@@ -207,6 +207,9 @@ const Index = class {
     </script>
 
     <style lang="css" scoped>
+    .container {
+      text-align: left;
+    }
     .options-button {
       float: right;
       min-width: 100px;
