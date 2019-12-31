@@ -4,6 +4,7 @@ const IndexRouter = require("./router/indexRouter.js");
 const HttpService = require("./service/httpService.js");
 const IndexStore = require("./store/indexStore.js");
 const IndexModule = require("./store/indexModule.js");
+const Eslintrc = require("./eslint/eslintrc.js");
 
 const Init = class {
   constructor(config) {
@@ -11,23 +12,36 @@ const Init = class {
   }
 
   generate() {
-    this.createRoutesStruct();
+    this.createRouterStruct();
+    this.createIndexRoutesStruct();
     this.createServicesStruct();
     this.createStoreStruct();
     this.createModulesStruct();
-    // this.createTemplateApp();
     this.createTemplateAlert();
     this.createTemplateMain();
+    this.createTemplateEslintrc();
   }
 
-  async createRoutesStruct() {
+  async createIndexRoutesStruct() {
     const indexRouter = new IndexRouter();
-    const indexTemplate = indexRouter.getTemplate();
+    const indexTemplate = indexRouter.getIndexRouterTemplate();
     fs.writeFile(this.config.pathRoutes + "/index.js", indexTemplate, err => {
       if (err) {
         console.error(err);
       } else {
-        console.log("Router file was create with success!");
+        console.log("Routes Index file was create with success!");
+      }
+    });
+  }
+
+  async createRouterStruct() {
+    const indexRouter = new IndexRouter();
+    const indexTemplate = indexRouter.getRouterTemplate();
+    fs.writeFile(this.config.pathRouter + "/index.js", indexTemplate, err => {
+      if (err) {
+        console.error(err);
+      } else {
+        console.log("Router Index file was create with success!");
       }
     });
   }
@@ -140,6 +154,18 @@ const Init = class {
         console.error(err);
       } else {
         console.log("Menu template file was create with success!");
+      }
+    });
+  }
+
+  async createTemplateEslintrc() {
+    const eslintrc = new Eslintrc();
+    const eslintrcTemplate = eslintrc.getTemplate();
+    fs.writeFile("./.eslintrc.js", eslintrcTemplate, err => {
+      if (err) {
+        console.error(err);
+      } else {
+        console.log("eslintrc.js file was create with success!");
       }
     });
   }

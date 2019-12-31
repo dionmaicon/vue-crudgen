@@ -125,7 +125,7 @@ const Form = class {
 <script>
   import { get${capitalizedName} } from "@/services/${this.modelName}";
   relationsImport
-  import { mapActions, mapGetters } from "vuex";
+  import { mapActions } from "vuex";
 
   dataImport
 

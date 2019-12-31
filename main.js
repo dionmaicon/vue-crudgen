@@ -10,6 +10,7 @@ const Types = require("./js/types.js");
 
 const config = {
   pathRoutes: path.join(process.cwd(), "src/routes"),
+  pathRouter: path.join(process.cwd(), "src/router"),
   pathComponents: path.join(process.cwd(), "src/components"),
   pathModels: path.join(process.cwd(), "src/models"),
   pathServices: path.join(process.cwd(), "src/services"),
@@ -25,6 +26,7 @@ const config = {
 const createBaseFolders = () => {
   let paths = [];
   paths.push(config.pathRoutes);
+  paths.push(config.pathRouter);
   paths.push(config.pathModels);
   paths.push(config.pathComponents);
   paths.push(config.pathStore);
@@ -78,7 +80,7 @@ const initModels = async () => {
     }
     return models;
   } catch (e) {
-    console.error(`Path to models looks bad. Try again with new path`);
+    console.error(`Path to models looks wrong. Try again with new path`);
     process.exit(-1);
   }
 };
@@ -89,7 +91,7 @@ const initModel = async () => {
     let name = path.basename(file, ".js");
     await createFiles(name, file);
   } catch (e) {
-    console.error(`Path to model looks bad. Try again with new path`);
+    console.error(`Path to model looks wrong. Try again with new path`);
   }
 };
 
@@ -104,7 +106,7 @@ const initApp = async () => {
     const init = new Init(config);
     init.generate();
   } catch (e) {
-    console.error(`Models cannot to be generate, we have some problem.`);
+    console.error(`Models cannot be generate, we have some problem.`);
     console.error(e);
   }
 };
@@ -168,7 +170,9 @@ const InstallLocalDependecies = async () => {
 async function main() {
   const program = new commander.Command();
 
-  program.version("Dion Maicon | CRUD Generator Vue.js Version: 1.0.4");
+  program.version(
+    "Vue.js CRUD-GEN Version: 1.0.6 developed by Dion Maicon - BETA"
+  );
   program
     // .option("-v, --vuetify", "Scaffold Vuetify Templates.")
     .option("-b, --bootstrap", "Scaffold Bootstrap Templates (Default).")
