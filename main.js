@@ -6,9 +6,11 @@ const { exec } = require("child_process");
 
 const Crud = require("./js/crud.js");
 const Init = require("./js/init.js");
+const Types = require("./js/types.js");
 
 const config = {
   pathRoutes: path.join(process.cwd(), "src/routes"),
+  pathRouter: path.join(process.cwd(), "src/router"),
   pathComponents: path.join(process.cwd(), "src/components"),
   pathModels: path.join(process.cwd(), "src/models"),
   pathServices: path.join(process.cwd(), "src/services"),
@@ -24,6 +26,7 @@ const config = {
 const createBaseFolders = () => {
   let paths = [];
   paths.push(config.pathRoutes);
+  paths.push(config.pathRouter);
   paths.push(config.pathModels);
   paths.push(config.pathComponents);
   paths.push(config.pathStore);
@@ -55,7 +58,12 @@ const createFiles = (name, file) => {
       console.error(`Template model "${name}" has sintax error.`);
       process.exit(-1);
     }
-    createTemplates(name, model, resource);
+    let valid = Types.modelIsValid(model);
+    if (valid.success == true) {
+      createTemplates(name, model, resource);
+    } else {
+      console.log(valid.message);
+    }
   });
 };
 
@@ -72,7 +80,7 @@ const initModels = async () => {
     }
     return models;
   } catch (e) {
-    console.error(`Path to models looks bad. Try again with new path`);
+    console.error(`Path to models looks wrong. Try again with new path`);
     process.exit(-1);
   }
 };
@@ -83,7 +91,7 @@ const initModel = async () => {
     let name = path.basename(file, ".js");
     await createFiles(name, file);
   } catch (e) {
-    console.error(`Path to model looks bad. Try again with new path`);
+    console.error(`Path to model looks wrong. Try again with new path`);
   }
 };
 
@@ -98,7 +106,7 @@ const initApp = async () => {
     const init = new Init(config);
     init.generate();
   } catch (e) {
-    console.error(`Models cannot to be generate, we have some problem.`);
+    console.error(`Models cannot be generate, we have some problem.`);
     console.error(e);
   }
 };
@@ -123,7 +131,7 @@ const createTemplates = async (name, model, resource) => {
 const InstallLocalDependecies = async () => {
   try {
     if (config.bootstrap) {
-      const child = exec(
+      exec(
         `npm install --save bootstrap axios v-money vue-the-mask vue-multiselect vuex-persist vue-json-pretty @fortawesome/fontawesome-free`,
         (error, stdout, stderr) => {
           if (error) {
@@ -134,7 +142,7 @@ const InstallLocalDependecies = async () => {
       );
     } else {
       config.frontend = "vuetify";
-      const child = exec(
+      exec(
         "npm install --save vuetify axios v-money vue-the-mask vue-multiselect vuex-persist vue-json-pretty",
         (error, stdout, stderr) => {
           if (error) {
@@ -144,6 +152,15 @@ const InstallLocalDependecies = async () => {
         }
       );
     }
+    exec(
+      `npm install --save-dev eslint-plugin-prettier eslint-config-prettier`,
+      (error, stdout, stderr) => {
+        if (error) {
+          console.error(error);
+        }
+        console.log(stdout);
+      }
+    );
   } catch (e) {
     console.error(`Models cannot to be generate, we have problems here.`);
     console.error(e);
@@ -153,7 +170,9 @@ const InstallLocalDependecies = async () => {
 async function main() {
   const program = new commander.Command();
 
-  program.version("Dion Maicon | CRUD Generator Vue.js Version: 1.0.4");
+  program.version(
+    "Vue.js CRUD-GEN Version: 1.0.6 developed by Dion Maicon - BETA"
+  );
   program
     // .option("-v, --vuetify", "Scaffold Vuetify Templates.")
     .option("-b, --bootstrap", "Scaffold Bootstrap Templates (Default).")
@@ -192,34 +211,20 @@ async function main() {
   }
 
   if (program.models) {
-    let models = await initModels();
+    await initModels();
   }
 
   if (program.unique) {
     await initModel();
   }
 
-  const childLintVue = exec(
-    "npx eslint --fix --ext=vue ./src/",
-    (error, stdout, stderr) => {
-      // if (error) {
-      //   throw error;
-      // }
-      // console.log(stdout);
-      console.log(stdout);
-    }
-  );
+  exec("npx eslint --fix --ext=vue ./src/", (error, stdout, stderr) => {
+    console.log(stdout);
+  });
 
-  const childLintJs = exec(
-    "npx eslint --fix --ext=js ./src/",
-    (error, stdout, stderr) => {
-      // if (error) {
-      //   throw error;
-      // }
-      // console.log(stdout);
-      console.log(stdout);
-    }
-  );
+  exec("npx eslint --fix --ext=js ./src/", (error, stdout, stderr) => {
+    console.log(stdout);
+  });
 }
 
 main();
