@@ -155,6 +155,8 @@ npm run serve
 
 ```
 
+To test your requests, you can use this repository https://github.com/dionmaicon/books-backend. Follow the instructions in the page and run the backend.
+
 Others models:
 
 ``` javascript
