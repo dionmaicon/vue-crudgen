@@ -7,6 +7,7 @@ const { exec } = require("child_process");
 const Crud = require("./js/crud.js");
 const Init = require("./js/init.js");
 const Types = require("./js/types.js");
+const { version } = require("./package.json");
 
 const config = {
   pathRoutes: path.join(process.cwd(), "src/routes"),
@@ -171,7 +172,7 @@ async function main() {
   const program = new commander.Command();
 
   program.version(
-    "Vue.js CRUD-GEN Version: 1.0.6 developed by Dion Maicon - BETA"
+    `Vue.js CRUD-GEN Version: ${version} developed by Dion Maicon - BETA`
   );
   program
     // .option("-v, --vuetify", "Scaffold Vuetify Templates.")
