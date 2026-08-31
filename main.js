@@ -56,7 +56,7 @@ const createFiles = (name, file) => {
     createFolder(name, basePath);
     const { model, resource } = require(file);
     if (model == null || resource == null) {
-      console.error(`Template model "${name}" has sintax error.`);
+      console.error(`Template model "${name}" has syntax error.`);
       process.exit(-1);
     }
     let valid = Types.modelIsValid(model);
