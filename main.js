@@ -96,6 +96,18 @@ const initModel = async () => {
   }
 };
 
+const frontendTemplatesExist = frontend =>
+  fs.existsSync(path.join(__dirname, "js", frontend));
+
+const checkFrontendTemplates = frontend => {
+  if (!frontendTemplatesExist(frontend)) {
+    console.error(
+      `Frontend "${frontend}" templates are not available. Supported frontends: bootstrap.`
+    );
+    process.exit(1);
+  }
+};
+
 const initApp = async () => {
   try {
     if (config.bootstrap) {
@@ -103,6 +115,8 @@ const initApp = async () => {
     } else {
       config.frontend = "vuetify";
     }
+
+    checkFrontendTemplates(config.frontend);
 
     const init = new Init(config);
     init.generate();
@@ -124,6 +138,8 @@ const createTemplates = async (name, model, resource) => {
   } else {
     config.frontend = "vuetify";
   }
+
+  checkFrontendTemplates(config.frontend);
 
   crud = new Crud(config);
   crud.generate();
@@ -232,4 +248,10 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { config, createBaseFolders, createFolder, main };
+module.exports = {
+  config,
+  createBaseFolders,
+  createFolder,
+  frontendTemplatesExist,
+  main
+};
