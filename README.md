@@ -216,3 +216,32 @@ const model = {
 
 module.exports = { model, resource };
 ```
+
+## Development
+
+To hack on the generator itself:
+
+```bash
+git clone https://github.com/dionmaicon/vue-crudgen.git
+cd vue-crudgen
+npm ci
+```
+
+Run the test suite (jest):
+
+```bash
+npm test
+```
+
+Lint the codebase:
+
+```bash
+npx eslint main.js js test
+```
+
+Smoke the CLI:
+
+```bash
+node main.js --version
+```
+
