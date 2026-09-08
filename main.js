@@ -129,7 +129,7 @@ const createTemplates = async (name, model, resource) => {
   crud.generate();
 };
 
-const InstallLocalDependecies = async () => {
+const installLocalDependencies = async () => {
   try {
     if (config.bootstrap) {
       exec(
@@ -178,8 +178,8 @@ async function main() {
     // .option("-v, --vuetify", "Scaffold Vuetify Templates.")
     .option("-b, --bootstrap", "Scaffold Bootstrap Templates (Default).")
     .option("-m, --models <path>", "Generate views for all models in path.")
-    .option("-u, --unique <path>", "Generate  for an unique model.")
-    .option("-i, --init ", "Init files to src scaffold.");
+    .option("-u, --unique <path>", "Generate views for a unique model.")
+    .option("-i, --init", "Init files to src scaffold.");
 
   program.parse(process.argv);
 
@@ -208,7 +208,7 @@ async function main() {
   if (program.init) {
     createBaseFolders();
     await initApp();
-    await InstallLocalDependecies();
+    await installLocalDependencies();
   }
 
   if (program.models) {
