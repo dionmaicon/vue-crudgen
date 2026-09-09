@@ -52,6 +52,10 @@ const createFolder = (name, basePath) => {
 
 const createFiles = (name, file) => {
   fs.stat(file, function(err, stats) {
+    if (err) {
+      console.error(`Template model file "${file}" not found.`);
+      return;
+    }
     let basePath = config.pathComponents;
     createFolder(name, basePath);
     const { model, resource } = require(file);
